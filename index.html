@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js"></script>
+  </head>
+  <body
+    onload="colorChange(), aimSettingsOpenClosed(), settingsChange(), gameStart()"
+  >
+    <section>
+      <h1 class="projHeader">code teaching game</h1>
+      <div class="proj proj3">
+        <div class="leftPanel">
+          <button onclick="gameStart()">move player/goal</button>
+          <button onclick="testIfPossible()">test if work</button>
+          <button onclick="gameMakeMap()">make map</button>
+          <div>level</div>
+          <div>lives</div>
+          <div>time</div>
+        </div>
+        <div id="gameArea" class="gameArea">
+          <!-- <button id="gameStartButton" class="gameStartButton">Start</button> -->
+          <div id="gamePlayer" class="gamePlayer">^</div>
+          <div id="gameGoal" class="gameGoal"></div>
+          <div id="gameTester" class="gameTester"></div>
+          <img
+            src="https://i.imgur.com/bZHjIV3.png"
+            alt="game Map"
+            class="gameMap"
+            referrerpolicy="no-referrer"
+            anchor="gameArea"
+          />
+        </div>
+        <div class="rightPanel">
+          <button id="gameMoveForward" class="move" onclick="gameMovement()">
+            move forward
+          </button>
+          <button id="gameTurnLeft" class="move" onclick="gameTurning(this.id)">
+            turn left
+          </button>
+          <button
+            id="gameTurnRight"
+            class="move"
+            onclick="gameTurning(this.id)"
+          >
+            turn right
+          </button>
+          <div>buttons</div>
+          <div>where buttons go after pressed</div>
+          <div>clear</div>
+          <div>go</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="empty"></div>
+
+    <section>
+      <h1 class="projHeader">Aim Trainer</h1>
+      <div id="aimTrainer" class="proj aimTrainer">
+        <button
+          class="aimButton"
+          id="aimButton"
+          anchor="aimTrainer"
+          onclick="aimStart()"
+        >
+          Start
+        </button>
+        <button
+          id="aimSettings"
+          class="aimSettings"
+          anchor="aimTrainer"
+          onclick="aimSettingsOpenClosed()"
+        >
+          Settings
+        </button>
+        <div id="aimTimer" class="aimTimer" anchor="aimTrainer">
+          <span class="aimTimerText">Current time</span>
+          <span id="aimTimerTime" class="aimTimerTime">actual time</span>
+        </div>
+        <div id="aimHighScore" class="aimHighScore" anchor="aimTrainer">
+          <span class="aimHighScoreText">High Score</span>
+          <span id="aimHighScoreTime" class="aimHighScoreTime"
+            >actual time</span
+          >
+        </div>
+        <div class="settingsButtons">
+          <button
+            id="aimEasy"
+            class="aimDifficulty"
+            onclick="settingsChange(this.id)"
+          >
+            Easy
+          </button>
+          <button
+            id="aimMedium"
+            class="aimDifficulty"
+            onclick="settingsChange(this.id)"
+          >
+            Medium
+          </button>
+          <button
+            id="aimHard"
+            class="aimDifficulty"
+            onclick="settingsChange(this.id)"
+          >
+            Hard
+          </button>
+          <div class="settingsButtonsAmount">
+            <button
+              id="aimOne"
+              class="aimBallCount"
+              onclick="settingsChange(this.id)"
+            >
+              5
+            </button>
+            <button
+              id="aimTwo"
+              class="aimBallCount"
+              onclick="settingsChange(this.id)"
+            >
+              10
+            </button>
+            <button
+              id="aimThree"
+              class="aimBallCount"
+              onclick="settingsChange(this.id)"
+            >
+              15
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="empty"></div>
+
+    <section>
+      <h1 class="projHeader">Color Flipper</h1>
+      <div id="colorFlipper" class="proj colorFlipper">
+        <div class="colorTextContainer">
+          <span id="colorNameText" class="colorNameText">Color: </span>
+          <span id="colorTextColor" class="colorTextColor">"colorName"</span>
+          <span id="colorHexText" class="colorHexText">Hex: "HexName"</span>
+        </div>
+        <button
+          id="colorButton"
+          class="colorButton"
+          onclick="colorChange()"
+          anchor="colorFlipper"
+        >
+          Change Color
+        </button>
+      </div>
+    </section>
+
+    <div class="empty"></div>
+
+    <section>
+      <h1 class="projHeader">test</h1>
+      <div id="content" class="proj">
+        <button onclick="addElement()">test</button>
+      </div>
+    </section>
+  </body>
+</html>

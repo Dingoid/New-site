@@ -1,0 +1,59 @@
+THINGS TO LEARN/FIX OVERALL:
+
+    learn JS objects
+        (https://www.freecodecamp.org/news/javascript-array-of-objects-tutorial-how-to-create-update-and-loop-through-objects-using-js-array-methods/)
+
+    game scaling, maintain aspect ratio when shrunk and general css shit, scaling is kinda fucked on everything
+
+    label all function and what they do
+
+
+
+WHERE I LEFT OFF:
+    (line 787)
+        the spike coordinates have now been combined and sorted correctly thanks to function at line 801, now at line 787 i am trying to 
+        seperate coordinates correctly and convert them from string to num (i realized while writing this that i might not need to convert them because
+        == doesnt check type but === does) anyway, once this is done then i can make a map to confirm that the future maze solver thing, actually can
+        tell where the spikes are and make sure that it doesnt run into them. then i need to actually write and understand the logic for maze solver using
+        the first link in "game always possible"
+
+
+CODING GAME NEEDS: (not sorted)
+
+    game always possible
+        (see if there is a way to always make sure that the player has a path the the goal)
+        (https://www.geeksforgeeks.org/shortest-distance-two-cells-matrix-grid/)
+        (https://levelup.gitconnected.com/finding-the-real-shortest-path-in-javascript-depth-first-search-93a3ce514250)
+        (https://talkwondo.github.io/the-maze-gunner/)
+
+        theoretically, take using starting position of player and goal, do a check where it (it being like a metaphorical check) goes 1 right,
+        if spike there then go down, if spike there then go left, if spike there go up, when/if it dead ends, save moves to array to be stored inside an array,
+        do that until a path is found, if path isnt found, regenerate everything?    
+
+    goal colision detection
+        (if player runs into goal, move to next level and generate new layout)
+        (!! HALF DONE !!) (it throws a console.log but it doesnt like actually do anything but its hooked up)
+
+    player movement
+        (start with buttons to move, then make player actions get stored until go button is pressed)
+        (!! HALF DONE !!) (player moves on button press and turns but the whole "store actions until go" thing isnt yet)
+        (this will probably be last cause it makes testing harder)
+    
+    Clean JS 
+        (there are a lot of functions written inside of other functions instead of just called in them, should take them out and just call them instead)
+        (also move all the variables to the top)
+        (specifically the gameStart function)
+
+    timer
+        (from start of first level to end of last level, then post time to screen)
+        (dont know if i want this or like "how many actions did it take you" and i introduce like rudimentary for loop thing)
+
+    lives
+        (if player hits spike and loses life, remove life, if lives = -1, game over and full reset)
+
+    Num of Spikes on button
+        (did work previously, but got rid of buttons and its now hard coded)
+        (will probably be worded as like "easy, medium, hard" because the num of spikes changes so much based on spawns)
+
+    start button ----- (*DONE* kinda, its the move player/goal button rn, still needs to be CSS'd)
+        (start button that spawns everything and makes background visible)
