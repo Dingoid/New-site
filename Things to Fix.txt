@@ -10,16 +10,18 @@ THINGS TO LEARN/FIX OVERALL:
 
 
 WHERE I LEFT OFF:
+(line 744)
+        make a map to confirm that the future maze solver thing, actually cantell where the spikes are and make sure that it doesnt run into them.
+        then i need to actually write and understand the logic for maze solver
+        the first link in "game always possible"
+
     okay, now that all the spikes are objects, i need to fix the checks that see if players/goal/or other spikes spawn on top of already placed spikes
     and if they do, to remove them from not only the game area, but also the array
 
-come back to this:
-    (line 787)
-        the spike coordinates have now been combined and sorted correctly thanks to function at line 801, now at line 787 i am trying to 
-        seperate coordinates correctly and convert them from string to num (i realized while writing this that i might not need to convert them because
-        == doesnt check type but === does) anyway, once this is done then i can make a map to confirm that the future maze solver thing, actually can
-        tell where the spikes are and make sure that it doesnt run into them. then i need to actually write and understand the logic for maze solver using
-        the first link in "game always possible"
+    ALSO wait to display items until game is confirmed to be solveable 
+
+    Function gameIfTrapped (will be useless when gameAlwaysPossible works)
+    Function areTheyTouchingSpikes (might be useless when gameAlwaysPossible works but will make it more likely)
 
 
 CODING GAME NEEDS: (not sorted)
