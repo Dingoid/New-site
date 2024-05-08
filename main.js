@@ -17,10 +17,6 @@ let currentIndex = -1,
   highScore15_75 = 100,
   numOfSpikes,
   buttonID,
-  gamePlayerX,
-  gamePlayerY,
-  gameGoalX,
-  gameGoalY,
   spikeTemp,
   spikeName,
   spin,
@@ -28,7 +24,9 @@ let currentIndex = -1,
   spikeX,
   spikeY,
   spikeArrayTemp = [],
-  spike = [];
+  spike = [],
+  gameGoal,
+  gamePlayer;
 const aimBallButtons = ["aimOne", "aimTwo", "aimThree"],
   aimDifficultyButtons = ["aimEasy", "aimMedium", "aimHard"],
   colorNames = ["Blue", "Red", "Yellow", "Green", "Pink", "Purple"],
@@ -307,37 +305,47 @@ function gameStart() {
   }
   console.log("\n");
   console.log("-----NEW GAME-----");
-  gameSpawnEntities();
   gameRandomSpikeSpawn();
-  gameIfTrapped();
+  gameSpawnEntities();
+  // gameIfTrapped();
 }
 
 function gameSpawnEntities() {
   // codeLearningGame Proj : uses other functions to spawn all the entities (spikes, player, goal)
   gameRandomGoalSpawn();
   gameRandomPlayerSpawn();
-  areTheyTouchingSpikes();
+  // areTheyTouchingSpikes();
 }
 
 function gameRandomGoalSpawn() {
   // codeLearningGame Proj : moves the goal to a random spot in the bottom right of the grid
+
   let min = 11;
   let max = 14;
   let x = Math.floor(min + Math.random() * (max - min + 1));
   let y = Math.floor(min + Math.random() * (max - min + 1));
-  document.getElementById("gameGoal").style.gridColumn = y;
-  document.getElementById("gameGoal").style.gridRow = x;
-  gameGoalX = x;
-  gameGoalY = y;
-  gameSpawnOnSpike();
+  document.getElementById("gameGoal").style.gridArea = x + "/" + y;
+  gameGoal = { x: x, y: y };
+  for (i = 0; i < spike.length; i++) {
+    if (spike[i].x == gameGoal.x && spike[i].y == gameGoal.y) {
+      console.log("Goal spawned on gameSpike" + i);
+      let spikeToRemove = document.getElementById("gameSpike" + i);
+      if (spikeToRemove != undefined) {
+        spikeToRemove.remove();
+        spike.splice(i, 1);
+      }
+    }
+  }
 }
 
 function gameRandomPlayerSpawn() {
   // codeLearningGame Proj : moves the player to a random spot in the top left of the grid
+
   let min = 2;
   let max = 5;
   let x = Math.floor(min + Math.random() * (max - min + 1));
   let y = Math.floor(min + Math.random() * (max - min + 1));
+  document.getElementById("gamePlayer").style.gridArea = x + "/" + y;
   let minSpin = 1;
   let maxSpin = 4;
   spin = Math.floor(minSpin + Math.random() * (maxSpin - minSpin + 1));
@@ -348,43 +356,16 @@ function gameRandomPlayerSpawn() {
   } else if (spin == 4) {
     document.getElementById("gamePlayer").style.rotate = 270 + "deg";
   }
-  gamePlayerX = x;
-  gamePlayerY = y;
-  if (gamePlayerX == gameGoalX && gamePlayerY == gameGoalY) {
-    x = Math.floor(min + Math.random() * (max - min + 1));
-    y = Math.floor(min + Math.random() * (max - min + 1));
-    gamePlayerX = x;
-    gamePlayerY = y;
-    document.getElementById("gamePlayer").style.gridColumn = y;
-    document.getElementById("gamePlayer").style.gridRow = x;
-  } else {
-    document.getElementById("gamePlayer").style.gridColumn = y;
-    document.getElementById("gamePlayer").style.gridRow = x;
-  }
-  gameSpawnOnSpike();
-  document.getElementById("gameTester").style.gridColumn = gamePlayerY;
-  document.getElementById("gameTester").style.gridRow = gamePlayerX;
-}
-
-function gameSpawnOnSpike() {
-  // codeLearningGame Proj : checks if player or goal spawn ontop of a spike, if they do, removes said spike
+  gamePlayer = { x: x, y: y };
   for (i = 0; i < spike.length; i++) {
-    if (spike[i].x == gamePlayerX && spike[i].y == gamePlayerY) {
-      let tempPlayerSpike = document.getElementById("gameSpike" + i);
-      if (tempPlayerSpike !== null) {
-        tempPlayerSpike.remove();
-        spike.splice(i, 1, null);
+    if (spike[i].x == gamePlayer.x && spike[i].y == gamePlayer.y) {
+      console.log("Player spawned on gameSpike" + i);
+      let spikeToRemove = document.getElementById("gameSpike" + i);
+      if (spikeToRemove != undefined) {
+        spikeToRemove.remove();
+        spike.splice(i, 1);
       }
     }
-    if (spike[i].x == gameGoalX && spike[i].y == gameGoalY) {
-      let tempGoalSpike = document.getElementById("gameSpike" + i);
-      if (tempGoalSpike !== null) {
-        tempGoalSpike.remove();
-        spike.splice(i, 1, null);
-      }
-    }
-    tempPlayerSpike = 0;
-    tempGoalSpike = 0;
   }
 }
 
@@ -397,13 +378,13 @@ function gameNumberOfSpike() {
   } else if (buttonID == "buttonHard") {
     numOfSpikes = 45;
   } else {
-    numOfSpikes = 50;
+    numOfSpikes = 100;
   }
 }
 
 function gameRandomSpikeSpawn(clicked_id) {
   // codeLearningGame Proj : spawns spike in random grid space, logs all the coords, then if a spike spawns ontop of another spike, deletes later spike
-  spikeArrayTemp = [];
+  spike = [];
   buttonID = clicked_id;
   gameNumberOfSpike();
   for (i = 0; i < numOfSpikes; i++) {
@@ -418,32 +399,24 @@ function gameRandomSpikeSpawn(clicked_id) {
     document.getElementById("gameArea").appendChild(spikeTemp);
     document.getElementById("gameSpike" + i).style.gridColumn = spikeY;
     document.getElementById("gameSpike" + i).style.gridRow = spikeX;
-    spike.push({ x: spikeX, y: spikeY });
+    spikeArrayTemp.push({ x: spikeX, y: spikeY });
   }
 
   for (i = 0; i < spikeArrayTemp.length; i++) {
-    let spikeTestX = spikeArrayTemp[i].x; //set spikeTestX to the value of spikeArrayX at the index (first loop 0, send loop 1...)
-    let spikeTestY = spikeArrayTemp[i].y; //set spikeTestY to the value of spikeArrayY at the index (first loop 0, send loop 1...)
+    let spikeTestX = spikeArrayTemp[i].x;
+    let spikeTestY = spikeArrayTemp[i].y;
     for (j = i; j < spikeArrayTemp.length; j++) {
-      //for loop inside for loop, set j = i (j is arbitrary, but cant be same as outter forloop or else it goes forever) (if j is set to 0, when this forloop starts, it checks from the first index to the last, if its set to i it will only check indexes after the index of i (i.e. if its the 15th loop, it wont start from 0 and check all the ones behind 15, it will start from 15 and go forward))
       if (
-        // check if spikeTestX has the same value as spikeArrayX[j] (i.e. if its the 3rd loop of the outer loop, spikeTestX = spikeArrayX[2] and spikeArrayX[j] would start at index 2. it would then start the inner loop and check if spikeArrayX[2] == spikeArrayX[2] and then spikeArrayX[2] == spikeArrayX[3] and then spikeArrayX[2] == spikeArrayX[4] and .... until it reaches the end)
         spikeTestX == spikeArrayTemp[j].x &&
         spikeTestY == spikeArrayTemp[j].y &&
-        i != j // this checks that as long as i DOES NOT = j (i.e. it wouldnt work if spikeTextX is set to index 2 and spikeArrayX is also set to index 2, all this does it make sure that it doesnt say that "hey index 2 matches index 2", because obviously it does, theyre the same index)
+        i != j
       ) {
         let spikeToRemove = document.getElementById("gameSpike" + j);
         if (spikeToRemove != undefined) {
           spikeToRemove.remove();
-          spikeArrayTemp.splice(j, 1, null);
+          spikeArrayTemp.splice(j, 1);
         }
       }
-    }
-  }
-
-  for (i = 0; i < spikeArrayTemp.length; i++) {
-    if (spikeArrayTemp[i] == null) {
-      spikeArrayTemp.splice(i, 1);
     }
   }
 
@@ -452,6 +425,7 @@ function gameRandomSpikeSpawn(clicked_id) {
       spike.push(spikeArrayTemp[i]);
     }
   }
+  spikeArrayTemp = [];
 }
 
 function gameIfTrapped() {
@@ -462,20 +436,32 @@ function gameIfTrapped() {
   for (i = 0; i < spike.length; i++) {
     let spikeValueAtIndexX = spike[i].x;
     let spikeValueAtIndexY = spike[i].y;
-    if (gamePlayerY >= 1) {
-      if (spikeValueAtIndexX + 1 == gamePlayerX && spike[i].y == gamePlayerY) {
+    if (gamePlayer.y >= 1) {
+      if (
+        spikeValueAtIndexX + 1 == gamePlayer.x &&
+        spike[i].y == gamePlayer.y
+      ) {
         //top
         spikesTouchingPlayer.splice(0, 1, i);
       }
-      if (spikeValueAtIndexY - 1 == gamePlayerY && spike[i].x == gamePlayerX) {
+      if (
+        spikeValueAtIndexY - 1 == gamePlayer.y &&
+        spike[i].x == gamePlayer.x
+      ) {
         //right
         spikesTouchingPlayer.splice(1, 1, i);
       }
-      if (spikeValueAtIndexX - 1 == gamePlayerX && spike[i].y == gamePlayerY) {
+      if (
+        spikeValueAtIndexX - 1 == gamePlayer.x &&
+        spike[i].y == gamePlayer.y
+      ) {
         //bottom
         spikesTouchingPlayer.splice(2, 1, i);
       }
-      if (spikeValueAtIndexY + 1 == gamePlayerY && spike[i].x == gamePlayerX) {
+      if (
+        spikeValueAtIndexY + 1 == gamePlayer.y &&
+        spike[i].x == gamePlayer.x
+      ) {
         //left
         spikesTouchingPlayer.splice(3, 1, i);
       }
@@ -485,20 +471,20 @@ function gameIfTrapped() {
   for (i = 0; i < spike.length; i++) {
     let spikeValueAtIndexX = spike[i].x;
     let spikeValueAtIndexY = spike[i].y;
-    if (gameGoalY <= 15) {
-      if (spikeValueAtIndexX + 1 == gameGoalX && spike[i].y == gameGoalY) {
+    if (gameGoal.y <= 15) {
+      if (spikeValueAtIndexX + 1 == gameGoal.x && spike[i].y == gameGoal.y) {
         //top
         spikesTouchingGoal.splice(0, 1, i);
       }
-      if (spikeValueAtIndexY - 1 == gameGoalY && spike[i].x == gameGoalX) {
+      if (spikeValueAtIndexY - 1 == gameGoal.y && spike[i].x == gameGoal.x) {
         //right
         spikesTouchingGoal.splice(1, 1, i);
       }
-      if (spikeValueAtIndexX - 1 == gameGoalX && spike[i].y == gameGoalY) {
+      if (spikeValueAtIndexX - 1 == gameGoal.x && spike[i].y == gameGoal.y) {
         //bottom
         spikesTouchingGoal.splice(2, 1, i);
       }
-      if (spikeValueAtIndexY + 1 == gameGoalY && spike[i].x == gameGoalX) {
+      if (spikeValueAtIndexY + 1 == gameGoal.y && spike[i].x == gameGoal.x) {
         //left
         spikesTouchingGoal.splice(3, 1, i);
       }
@@ -551,45 +537,45 @@ function gameMovement() {
   if (gameSpikeCollision()) {
   } else if (gameGoalCollision()) {
     if (spin == 1) {
-      document.getElementById("gamePlayer").style.gridRow = gamePlayerX - 1;
+      document.getElementById("gamePlayer").style.gridRow = gamePlayer.x - 1;
     } else if (spin == 2) {
-      document.getElementById("gamePlayer").style.gridColumn = gamePlayerY + 1;
+      document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y + 1;
     } else if (spin == 3) {
-      document.getElementById("gamePlayer").style.gridRow = gamePlayerX + 1;
+      document.getElementById("gamePlayer").style.gridRow = gamePlayer.x + 1;
     } else if (spin == 4) {
-      document.getElementById("gamePlayer").style.gridColumn = gamePlayerY - 1;
+      document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y - 1;
     }
-    if (gameGoalX == gamePlayerX && gameGoalY == gamePlayerY) {
+    if (gameGoal.x == gamePlayer.x && gameGoal.y == gamePlayer.y) {
       console.log("you win");
     }
     console.log("you win");
-  } else if (gamePlayerX <= 15 && gamePlayerY <= 15) {
+  } else if (gamePlayer.x <= 15 && gamePlayer.y <= 15) {
     if (spin == 1) {
-      document.getElementById("gamePlayer").style.gridRow = gamePlayerX - 1;
-      gamePlayerX--;
+      document.getElementById("gamePlayer").style.gridRow = gamePlayer.x - 1;
+      gamePlayer.x--;
     } else if (spin == 2) {
-      document.getElementById("gamePlayer").style.gridColumn = gamePlayerY + 1;
-      gamePlayerY++;
+      document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y + 1;
+      gamePlayer.y++;
     } else if (spin == 3) {
-      document.getElementById("gamePlayer").style.gridRow = gamePlayerX + 1;
-      gamePlayerX++;
+      document.getElementById("gamePlayer").style.gridRow = gamePlayer.x + 1;
+      gamePlayer.x++;
     } else if (spin == 4) {
-      document.getElementById("gamePlayer").style.gridColumn = gamePlayerY - 1;
-      gamePlayerY--;
+      document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y - 1;
+      gamePlayer.y--;
     }
-    if (gamePlayerX == 0) {
-      gamePlayerX = 1;
+    if (gamePlayer.x == 0) {
+      gamePlayer.x = 1;
     }
-    if (gamePlayerX == 16) {
-      document.getElementById("gamePlayer").style.gridRow = gamePlayerX - 1;
-      gamePlayerX = 15;
+    if (gamePlayer.x == 16) {
+      document.getElementById("gamePlayer").style.gridRow = gamePlayer.x - 1;
+      gamePlayer.x = 15;
     }
-    if (gamePlayerY == 0) {
-      gamePlayerY = 1;
+    if (gamePlayer.y == 0) {
+      gamePlayer.y = 1;
     }
-    if (gamePlayerY >= 16) {
-      document.getElementById("gamePlayer").style.gridColumn = gamePlayerY - 1;
-      gamePlayerY = 15;
+    if (gamePlayer.y >= 16) {
+      document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y - 1;
+      gamePlayer.y = 15;
     }
   }
 }
@@ -633,29 +619,29 @@ function gameSpikeCollision() {
     let spikeValueAtIndexX = spike[i].x;
     let spikeValueAtIndexY = spike[i].y;
     if (
-      spikeValueAtIndexX + 1 === gamePlayerX &&
-      gamePlayerY === spike[i].y &&
+      spikeValueAtIndexX + 1 === gamePlayer.x &&
+      gamePlayer.y === spike[i].y &&
       spin == 1
     ) {
       return (touchingSpike = true);
     }
     if (
-      spikeValueAtIndexY - 1 === gamePlayerY &&
-      gamePlayerX === spike[i].x &&
+      spikeValueAtIndexY - 1 === gamePlayer.y &&
+      gamePlayer.x === spike[i].x &&
       spin == 2
     ) {
       return (touchingSpike = true);
     }
     if (
-      spikeValueAtIndexX - 1 === gamePlayerX &&
-      gamePlayerY === spike[i].y &&
+      spikeValueAtIndexX - 1 === gamePlayer.x &&
+      gamePlayer.y === spike[i].y &&
       spin == 3
     ) {
       return (touchingSpike = true);
     }
     if (
-      spikeValueAtIndexY + 1 === gamePlayerY &&
-      gamePlayerX === spike[i].x &&
+      spikeValueAtIndexY + 1 === gamePlayer.y &&
+      gamePlayer.x === spike[i].x &&
       spin == 4
     ) {
       return (touchingSpike = true);
@@ -665,19 +651,35 @@ function gameSpikeCollision() {
 
 function gameGoalCollision() {
   touchingGoal = false;
-  if (gameGoalX + 1 === gamePlayerX && gamePlayerY === gameGoalY && spin == 1) {
+  if (
+    gameGoal.x + 1 === gamePlayer.x &&
+    gamePlayer.y === gameGoal.y &&
+    spin == 1
+  ) {
     touchingGoal = true;
     return touchingGoal;
   }
-  if (gameGoalY - 1 === gamePlayerY && gamePlayerX === gameGoalX && spin == 2) {
+  if (
+    gameGoal.y - 1 === gamePlayer.y &&
+    gamePlayer.x === gameGoal.x &&
+    spin == 2
+  ) {
     touchingGoal = true;
     return touchingGoal;
   }
-  if (gameGoalX - 1 === gamePlayerX && gamePlayerY === gameGoalY && spin == 3) {
+  if (
+    gameGoal.x - 1 === gamePlayer.x &&
+    gamePlayer.y === gameGoal.y &&
+    spin == 3
+  ) {
     touchingGoal = true;
     return touchingGoal;
   }
-  if (gameGoalY + 1 === gamePlayerY && gamePlayerX === gameGoalX && spin == 4) {
+  if (
+    gameGoal.y + 1 === gamePlayer.y &&
+    gamePlayer.x === gameGoal.x &&
+    spin == 4
+  ) {
     touchingGoal = true;
     return touchingGoal;
   }
@@ -690,97 +692,66 @@ function areTheyTouchingSpikes() {
   for (i = 0; i < spike.length; i++) {
     let spikeValueAtIndexX = spike[i].x;
     let spikeValueAtIndexY = spike[i].y;
-    if (gamePlayerX === spikeValueAtIndexX + 1 && gamePlayerY === spike[i].y) {
+    if (
+      gamePlayer.x === spikeValueAtIndexX + 1 &&
+      gamePlayer.y === spike[i].y
+    ) {
       spikesTouchingPlayer.push(i);
     }
-    if (gamePlayerX === spikeValueAtIndexX - 1 && gamePlayerY === spike[i].y) {
+    if (
+      gamePlayer.x === spikeValueAtIndexX - 1 &&
+      gamePlayer.y === spike[i].y
+    ) {
       spikesTouchingPlayer.push(i);
     }
-    if (gamePlayerY === spikeValueAtIndexY + 1 && gamePlayerX === spike[i].x) {
+    if (
+      gamePlayer.y === spikeValueAtIndexY + 1 &&
+      gamePlayer.x === spike[i].x
+    ) {
       spikesTouchingPlayer.push(i);
     }
-    if (gamePlayerY === spikeValueAtIndexY - 1 && gamePlayerX === spike[i].x) {
+    if (
+      gamePlayer.y === spikeValueAtIndexY - 1 &&
+      gamePlayer.x === spike[i].x
+    ) {
       spikesTouchingPlayer.push(i);
     }
-    if (gameGoalX === spikeValueAtIndexX + 1 && gameGoalY === spike[i].y) {
+    if (gameGoal.x === spikeValueAtIndexX + 1 && gameGoal.y === spike[i].y) {
       spikesTouchingGoal.push(i);
     }
-    if (gameGoalX === spikeValueAtIndexX - 1 && gameGoalY === spike[i].y) {
+    if (gameGoal.x === spikeValueAtIndexX - 1 && gameGoal.y === spike[i].y) {
       spikesTouchingGoal.push(i);
     }
-    if (gameGoalY === spikeValueAtIndexY + 1 && gameGoalX === spike[i].x) {
+    if (gameGoal.y === spikeValueAtIndexY + 1 && gameGoal.x === spike[i].x) {
       spikesTouchingGoal.push(i);
     }
-    if (gameGoalY === spikeValueAtIndexY - 1 && gameGoalX === spike[i].x) {
+    if (gameGoal.y === spikeValueAtIndexY - 1 && gameGoal.x === spike[i].x) {
       spikesTouchingGoal.push(i);
     }
   }
 }
 
-let N = 15;
-let M = 15;
-
-class GridCells {
-  constructor(x, y, d) {
-    this.row = x;
-    this.column = y;
-    this.distance = d;
-  }
-}
+let gameMap = [];
+let gameMapRow = [];
+let testSpikes = [
+  { x: 1, y: 1 },
+  { x: 3, y: 2 },
+  { x: 5, y: 1 },
+  { x: 2, y: 2 },
+  { x: 3, y: 1 },
+];
 
 function gameMakeMap() {
-  // let map = [];
-  // let mapRow = new Array(15);
-  // let mapY = 1;
-  // for (i = 1; i <= 15; i++) {
-  //   for (j = 1; j <= 15; j++) {
-  //     tempValue = "'" + i + "/" + j + "'";
-  //     console.log(tempValue);
-  //     if (testArray.indexOf(tempValue) != -1) {
-  //       console.log("yes");
-  //     }
-  //     console.log(testArray.indexOf(tempValue));
-  //   }
-
-  //   mapRow.fill("O");
-  //   map.push(mapRow);
-  // }
-
-  // console.log(testArray);
-  // console.log(map);
-
-  let text = "1/8";
-  console.log(text.indexOf("/"));
-  if (text.indexOf("/") == 2 && text.length == 3) {
-    let resultX = text.substring(0, 1);
-    let resultY = text.substring(2, 3);
-    let resultXconv = +resultX;
-    console.log(resultXconv);
-    let resultYconv = +resultY;
-    console.log(resultYconv);
-  }
-}
-
-let testArray = [];
-
-function testIfPossible() {
-  let Spike = [];
-
-  for (i = 0; i < 50; i++) {
-    let min = 1;
-    let max = 15;
-    x = Math.floor(min + Math.random() * (max - min + 1));
-    y = Math.floor(min + Math.random() * (max - min + 1));
-    Spike.push({ x, y });
-  }
-
-  for (i = 0; i < Spike.length; i++) {
-    console.log("ID: " + i + ": x=" + Spike[i].x + " y=" + Spike[i].y);
-  }
-
-  for (i = 0; i < Spike.length; i++) {
-    if (Spike[i].x == gamePlayerX && Spike[i].y == gamePlayerY) {
-      console.log("IT WORKS " + i);
+  for (i = 0; i < 5; i++) {
+    // console.log(testSpikes[i].x);
+    if (testSpikes[i].x == i + 1 && testSpikes[i].y == i + 1) {
+      gameMapRow.push("X");
+    } else if (testSpikes[i].x != i && testSpikes[i].y != i) {
+      gameMapRow.push("O");
     }
+    gameMap.push(gameMapRow);
   }
+  console.log(gameMap);
 }
+
+function testIfPossible() {}
