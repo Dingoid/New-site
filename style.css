@@ -25,7 +25,7 @@ body {
 
 div.proj {
   width: 99%;
-  height: 90vh;
+  height: 95vh;
 }
 
 button {
@@ -39,7 +39,7 @@ button:hover {
 
 .empty {
   border: 1px solid green;
-  height: 25vh;
+  height: 8vh;
   width: 99%;
   background-color: black;
 }
@@ -226,13 +226,12 @@ button:hover {
 .leftPanel {
   background-color: red;
   height: 100%;
-  width: 15%;
+  width: 100%;
 }
 
 .gameArea {
   aspect-ratio: 1 / 1;
-  max-height: 850px;
-  min-height: 500px;
+  min-height: 100%;
   display: grid;
   grid-template-columns: repeat(15, 6.666%);
   grid-template-rows: repeat(15, 6.666%);
@@ -268,12 +267,12 @@ button:hover {
 
 .gameSpike {
   background-color: grey;
-  font-size: 2em;
+  font-size: 5em;
   text-align: center;
 }
 
 .rightPanel {
   background-color: green;
   height: 100%;
-  width: 15%;
+  width: 100%;
 }
