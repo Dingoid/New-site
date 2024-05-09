@@ -8,6 +8,7 @@ THINGS TO LEARN/FIX OVERALL:
     fix general cs shit
 
 
+
 WHERE I LEFT OFF:
     line(701)
         want to add a loop function, also when buttons are clicked and added, if they reach the bottom
