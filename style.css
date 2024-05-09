@@ -2,6 +2,37 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   color: white;
   background-color: rgb(30, 30, 30);
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.customScroll {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  width: fit-content;
+  height: 100%;
+  position: fixed;
+  right: 0%;
+  z-index: 200;
+  margin: 0 0.25%;
+}
+
+.scrollBall {
+  background: gray;
+  display: block;
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  margin: 2% 0;
+}
+
+.scrollBall:hover {
+  background: white;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 * {
@@ -10,21 +41,19 @@ body {
 }
 
 .projHeader {
-  border: 1px solid green;
-  width: 99%;
+  background-color: rgb(25, 25, 25);
+  width: 100%;
   margin-top: 0;
   margin-bottom: 0;
 }
 
 .proj {
-  border: 1px solid red;
-  width: 99%;
   margin-top: 0;
   margin-bottom: 0;
 }
 
 div.proj {
-  width: 99%;
+  width: 98%;
   height: 95vh;
 }
 
@@ -38,10 +67,9 @@ button:hover {
 }
 
 .empty {
-  border: 1px solid green;
   height: 8vh;
-  width: 99%;
-  background-color: black;
+  width: 100%;
+  background-color: rgb(25, 25, 25);
 }
 
 .colorFlipper {
@@ -224,9 +252,27 @@ button:hover {
 }
 
 .leftPanel {
-  background-color: red;
+  background-color: rgb(30, 30, 30);
+  border: 1px solid green;
   height: 100%;
-  width: 100%;
+  width: 35%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.leftInfo {
+  margin: 5% 2%;
+  height: fit-content;
+  font-size: 2em;
+  border: 1px solid purple;
+}
+
+.gameLeftButtons {
+  border: 1px solid green;
+  bottom: 0;
+  margin: 5% 2%;
+  height: fit-content;
 }
 
 .gameArea {
@@ -252,13 +298,6 @@ button:hover {
   z-index: 1;
 }
 
-.gameTester {
-  background-color: red;
-  font-size: 3em;
-  text-align: center;
-  z-index: 0;
-}
-
 .gameGoal {
   background-color: gold;
   grid-column: 15;
@@ -272,7 +311,72 @@ button:hover {
 }
 
 .rightPanel {
-  background-color: green;
+  background-color: rgb(30, 30, 30);
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  position: relative;
+}
+
+.rightTopButtons {
+  border: 1px solid red;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: 1% 0% 0 0;
+  height: 5%;
+}
+
+.rightPressedButtons {
+  border: 1px solid red;
+  height: 100%;
+}
+
+.rightBottomButtons {
+  border: 1px solid red;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-bottom: 1%;
+  height: 5%;
+}
+
+.gameButton {
+  background-color: grey;
+  width: 20%;
+}
+
+.gameButtonsInPanel {
+  background-color: #a0a0a0;
+  color: white;
+  position: relative;
+  height: 1.25em;
+  margin: 1% 40%;
+  text-align: center;
+}
+
+.gameButtonsInPanelFor {
+  background-color: #606060;
+  color: white;
+  position: relative;
+  height: 1.25em;
+  margin: 1% 35%;
+  text-align: center;
+}
+
+.forLoopInput {
+  font-style: inherit;
+  color: white;
+  background-color: #606060;
+  border: none;
+  height: fit-content;
+  width: 25%;
+  margin-left: 20%;
+  position: relative;
+  right: 0;
+  justify-content: end;
+
+  text-align: center;
 }

@@ -309,6 +309,7 @@ function gameStart() {
   testIfPossible();
   if (testIfPossible(true)) {
     gamePlaceOnGrid();
+    gameSpawnedOnSpike();
   } else {
     console.log("not possible");
     gameStart();
@@ -320,7 +321,6 @@ function gameSpawnEntities() {
   gameRandomSpikeSpawn();
   gameRandomGoalSpawn();
   gameRandomPlayerSpawn();
-  gameSpawnedOnSpike();
 }
 
 function gameRandomGoalSpawn() {
@@ -431,6 +431,8 @@ function gamePlaceOnGrid() {
     document.getElementById("gamePlayer").style.rotate = 180 + "deg";
   } else if (spin == 4) {
     document.getElementById("gamePlayer").style.rotate = 270 + "deg";
+  } else {
+    document.getElementById("gamePlayer").style.rotate = 0 + "deg";
   }
 
   document.getElementById("gameGoal").style.gridArea =
@@ -694,4 +696,54 @@ function testIfPossible() {
     }
   }
   return false;
+}
+
+let numOfButtons = 0;
+
+function gameButtonActions(clicked_id) {
+  //dont forget to do (this.id) in html
+  let buttonTemp;
+  if (clicked_id == "gameTurnLeft") {
+    buttonTemp = document.createElement("div");
+    buttonTemp.classList.add("gameButtonsInPanel");
+    buttonTemp.innerHTML = "turn left";
+    document.getElementById("rightPressedButtons").appendChild(buttonTemp);
+    numOfButtons++;
+  }
+  if (clicked_id == "gameMoveForward") {
+    buttonTemp = document.createElement("div");
+    buttonTemp.classList.add("gameButtonsInPanel");
+    buttonTemp.innerHTML = "forward";
+    document.getElementById("rightPressedButtons").appendChild(buttonTemp);
+    numOfButtons++;
+  }
+  if (clicked_id == "gameTurnRight") {
+    buttonTemp = document.createElement("div");
+    buttonTemp.classList.add("gameButtonsInPanel");
+    buttonTemp.innerHTML = "turn right";
+    document.getElementById("rightPressedButtons").appendChild(buttonTemp);
+    numOfButtons++;
+  }
+  if (clicked_id == "gameForLoop") {
+    //   buttonTemp = document.createElement("div");
+    //   buttonTemp.classList.add("gameButtonsInPanelFor");
+    //   buttonTemp.innerHTML = "for loop";
+    //   buttonTemp.setAttribute("id", "forLoop");
+    //   document.getElementById("rightPressedButtons").appendChild(buttonTemp);
+    // buttonTemp = document.createElement("input");
+    // buttonTemp = classList.add("forLoopInput");
+    // buttonTemp.setAttribute("type", "number");
+    // buttonTemp.setAttribute("min", "1");
+    // buttonTemp.setAttribute("max", "100");
+    // // document.getElementById("forLoop").appendChild(buttonTemp);
+    // document.getElementById("rightPressedButtons").appendChild(buttonTemp);
+    numOfButtons++;
+  }
+}
+
+function gameButtonsClear() {
+  const pressedButtons = document.getElementById("rightPressedButtons");
+  while (pressedButtons.hasChildNodes()) {
+    pressedButtons.removeChild(pressedButtons.firstChild);
+  }
 }
