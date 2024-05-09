@@ -75,8 +75,19 @@
           </div>
           <div id="rightPressedButtons" class="rightPressedButtons"></div>
           <div class="rightBottomButtons">
-            <button class="gameButton" onclick="gameButtonsClear()">
+            <button
+              id="gameClear"
+              class="gameButton"
+              onclick="gameButtonsClear(this.id)"
+            >
               clear
+            </button>
+            <button
+              id="gameDelete"
+              class="gameButton"
+              onclick="gameButtonsClear(this.id)"
+            >
+              delete
             </button>
             <button class="gameButton">go</button>
           </div>
