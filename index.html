@@ -10,21 +10,30 @@
   <body
     onload="colorChange(), aimSettingsOpenClosed(), settingsChange(), gameStart() ,testIfPossible()"
   >
+    <div class="customScroll">
+      <button class="scrollBall"></button>
+      <button class="scrollBall"></button>
+      <button class="scrollBall"></button>
+      <button class="scrollBall"></button>
+    </div>
     <section>
       <h1 class="projHeader">code teaching game</h1>
       <div class="proj proj3">
         <div class="leftPanel">
-          <button onclick="gameStart()">move player/goal</button>
-          <button onclick="testIfPossible()">test if work</button>
-          <div>level</div>
-          <div>lives</div>
-          <div>time</div>
+          <div class="leftInfo">level :</div>
+          <div class="leftInfo">lives :</div>
+          <div class="leftInfo">time :</div>
+          <div class="gameLeftButtons">
+            <button class="gameButton" onclick="gameStart()">
+              move player/goal
+            </button>
+            <button class="gameButton" onclick="">test if work</button>
+          </div>
         </div>
         <div id="gameArea" class="gameArea">
           <!-- <button id="gameStartButton" class="gameStartButton">Start</button> -->
           <div id="gamePlayer" class="gamePlayer">^</div>
           <div id="gameGoal" class="gameGoal"></div>
-          <div id="gameTester" class="gameTester"></div>
           <img
             src="https://i.imgur.com/bZHjIV3.png"
             alt="game Map"
@@ -34,23 +43,43 @@
           />
         </div>
         <div class="rightPanel">
-          <button id="gameMoveForward" class="move" onclick="gameMovement()">
-            move forward
-          </button>
-          <button id="gameTurnLeft" class="move" onclick="gameTurning(this.id)">
-            turn left
-          </button>
-          <button
-            id="gameTurnRight"
-            class="move"
-            onclick="gameTurning(this.id)"
-          >
-            turn right
-          </button>
-          <div>buttons</div>
-          <div>where buttons go after pressed</div>
-          <div>clear</div>
-          <div>go</div>
+          <div class="rightTopButtons">
+            <button
+              id="gameTurnLeft"
+              class="gameButton"
+              onclick="gameButtonActions(this.id), gameTurning(this.id)"
+            >
+              turn left
+            </button>
+            <button
+              id="gameMoveForward"
+              class="gameButton"
+              onclick="gameButtonActions(this.id), gameMovement()"
+            >
+              forward
+            </button>
+            <button
+              id="gameTurnRight"
+              class="gameButton"
+              onclick="gameButtonActions(this.id), gameTurning(this.id)"
+            >
+              turn right
+            </button>
+            <button
+              id="gameForLoop"
+              class="gameButton"
+              onclick="gameButtonActions(this.id) "
+            >
+              for loop
+            </button>
+          </div>
+          <div id="rightPressedButtons" class="rightPressedButtons"></div>
+          <div class="rightBottomButtons">
+            <button class="gameButton" onclick="gameButtonsClear()">
+              clear
+            </button>
+            <button class="gameButton">go</button>
+          </div>
         </div>
       </div>
     </section>

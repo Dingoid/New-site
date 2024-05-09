@@ -3,23 +3,32 @@ THINGS TO LEARN/FIX OVERALL:
     game scaling, maintain aspect ratio when shrunk and general css shit, scaling is kinda fucked on everything
 
     scroll buttons that get bigger based on what part of the page youre on and you can click on them to quickly scroll to that part of the page
+        (the balls are there but the do literally nothing right now)
 
     fix general cs shit
 
 
 WHERE I LEFT OFF:
-    game is now possible 100% of the time, now i just need to decide on design of the game area lol
+    line(701)
+        want to add a loop function, also when buttons are clicked and added, if they reach the bottom
+        they just start pushing everything (pretty sure its a css thing)
+        idk its just kinda fucked but ill figure it out
+    
 
     after that i need to make the movement system actually work
         (press movement buttons to add actions to queue then on "Go" button press, it does all the moves, or "clear" to clear all actions selected)
+
     make a lives system
         (player has like 3 lives or somethin, when player runs into spike, loose life and restart puzzle, keep same spikes and goal but just reset player)
+
     make a levels system
         (you only beat the game after you clear idk 3 levels or somethin)
+
     add scoring system
         (timer i think would work better than minimum actions because of the randomly generated maps)
         (or i could do a "how close to perfect were you" id have to make a system to count actions including turns tho)
             (i think i like the "close to perfect" more than time)
+
     add "sprites"
         (probably just rip shit off google or whatever, just somethin better than boxes)
         (maybe even change background, idk i kinda like minecraft grass)
