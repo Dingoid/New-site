@@ -22,7 +22,7 @@ WHERE I LEFT OFF:
             (i think i like the "close to perfect" more than time)
     add "sprites"
         (probably just rip shit off google or whatever, just somethin better than boxes)
-        (maybe even change background, idk i kinda like minecraft grass tho)
+        (maybe even change background, idk i kinda like minecraft grass)
     
 
 CODING GAME NEEDS: (not sorted)
