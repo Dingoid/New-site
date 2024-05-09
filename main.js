@@ -299,74 +299,49 @@ function gameStart() {
   // codeLearningGame Proj : starts the game on button press
   for (i = 0; i < numOfSpikes; i++) {
     let spikeToRemove = document.getElementById("gameSpike" + i);
-    if (spikeToRemove != null) {
+    if (spikeToRemove != undefined) {
       spikeToRemove.remove();
     }
   }
   console.log("\n");
   console.log("-----NEW GAME-----");
-  gameRandomSpikeSpawn();
   gameSpawnEntities();
-  // gameIfTrapped();
+  testIfPossible();
+  if (testIfPossible(true)) {
+    gamePlaceOnGrid();
+  } else {
+    console.log("not possible");
+    gameStart();
+  }
 }
 
 function gameSpawnEntities() {
   // codeLearningGame Proj : uses other functions to spawn all the entities (spikes, player, goal)
+  gameRandomSpikeSpawn();
   gameRandomGoalSpawn();
   gameRandomPlayerSpawn();
-  // areTheyTouchingSpikes();
+  gameSpawnedOnSpike();
 }
 
 function gameRandomGoalSpawn() {
   // codeLearningGame Proj : moves the goal to a random spot in the bottom right of the grid
-
   let min = 11;
   let max = 14;
   let x = Math.floor(min + Math.random() * (max - min + 1));
   let y = Math.floor(min + Math.random() * (max - min + 1));
-  document.getElementById("gameGoal").style.gridArea = x + "/" + y;
   gameGoal = { x: x, y: y };
-  for (i = 0; i < spike.length; i++) {
-    if (spike[i].x == gameGoal.x && spike[i].y == gameGoal.y) {
-      console.log("Goal spawned on gameSpike" + i);
-      let spikeToRemove = document.getElementById("gameSpike" + i);
-      if (spikeToRemove != undefined) {
-        spikeToRemove.remove();
-        spike.splice(i, 1);
-      }
-    }
-  }
 }
 
 function gameRandomPlayerSpawn() {
   // codeLearningGame Proj : moves the player to a random spot in the top left of the grid
-
   let min = 2;
   let max = 5;
-  let x = Math.floor(min + Math.random() * (max - min + 1));
-  let y = Math.floor(min + Math.random() * (max - min + 1));
-  document.getElementById("gamePlayer").style.gridArea = x + "/" + y;
   let minSpin = 1;
   let maxSpin = 4;
+  let x = Math.floor(min + Math.random() * (max - min + 1));
+  let y = Math.floor(min + Math.random() * (max - min + 1));
   spin = Math.floor(minSpin + Math.random() * (maxSpin - minSpin + 1));
-  if (spin == 2) {
-    document.getElementById("gamePlayer").style.rotate = 90 + "deg";
-  } else if (spin == 3) {
-    document.getElementById("gamePlayer").style.rotate = 180 + "deg";
-  } else if (spin == 4) {
-    document.getElementById("gamePlayer").style.rotate = 270 + "deg";
-  }
   gamePlayer = { x: x, y: y };
-  for (i = 0; i < spike.length; i++) {
-    if (spike[i].x == gamePlayer.x && spike[i].y == gamePlayer.y) {
-      console.log("Player spawned on gameSpike" + i);
-      let spikeToRemove = document.getElementById("gameSpike" + i);
-      if (spikeToRemove != undefined) {
-        spikeToRemove.remove();
-        spike.splice(i, 1);
-      }
-    }
-  }
 }
 
 function gameNumberOfSpike() {
@@ -383,6 +358,7 @@ function gameNumberOfSpike() {
 }
 
 function gameRandomSpikeSpawn(clicked_id) {
+  console.log("spawning spikes");
   // codeLearningGame Proj : spawns spike in random grid space, logs all the coords, then if a spike spawns ontop of another spike, deletes later spike
   spike = [];
   buttonID = clicked_id;
@@ -392,14 +368,7 @@ function gameRandomSpikeSpawn(clicked_id) {
     let max = 15;
     spikeX = Math.floor(min + Math.random() * (max - min + 1));
     spikeY = Math.floor(min + Math.random() * (max - min + 1));
-    spikeTemp = document.createElement("div");
-    spikeTemp.classList.add("gameSpike");
-    spikeTemp.setAttribute("id", "gameSpike" + i);
-    spikeTemp.innerHTML = i;
-    document.getElementById("gameArea").appendChild(spikeTemp);
-    document.getElementById("gameSpike" + i).style.gridColumn = spikeY;
-    document.getElementById("gameSpike" + i).style.gridRow = spikeX;
-    spikeArrayTemp.push({ x: spikeX, y: spikeY });
+    spikeArrayTemp.push({ id: i, x: spikeX, y: spikeY });
   }
 
   for (i = 0; i < spikeArrayTemp.length; i++) {
@@ -411,7 +380,9 @@ function gameRandomSpikeSpawn(clicked_id) {
         spikeTestY == spikeArrayTemp[j].y &&
         i != j
       ) {
-        let spikeToRemove = document.getElementById("gameSpike" + j);
+        let spikeToRemove = document.getElementById(
+          "gameSpike" + spikeArrayTemp[j].id
+        );
         if (spikeToRemove != undefined) {
           spikeToRemove.remove();
           spikeArrayTemp.splice(j, 1);
@@ -419,7 +390,6 @@ function gameRandomSpikeSpawn(clicked_id) {
       }
     }
   }
-
   for (i = 0; i < spikeArrayTemp.length; i++) {
     if (spikeArrayTemp[i] != null) {
       spike.push(spikeArrayTemp[i]);
@@ -428,111 +398,57 @@ function gameRandomSpikeSpawn(clicked_id) {
   spikeArrayTemp = [];
 }
 
-function gameIfTrapped() {
-  let valNotNullPlayer = 0;
-  let valNotNullGoal = 0;
-  let spikesTouchingPlayer = [null, null, null, null];
-  let spikesTouchingGoal = [null, null, null, null];
+function gameSpawnedOnSpike() {
+  // codeLearningGame Proj : checks if player or goal spawns ontop of spike, if it does, deletes it
   for (i = 0; i < spike.length; i++) {
-    let spikeValueAtIndexX = spike[i].x;
-    let spikeValueAtIndexY = spike[i].y;
-    if (gamePlayer.y >= 1) {
-      if (
-        spikeValueAtIndexX + 1 == gamePlayer.x &&
-        spike[i].y == gamePlayer.y
-      ) {
-        //top
-        spikesTouchingPlayer.splice(0, 1, i);
-      }
-      if (
-        spikeValueAtIndexY - 1 == gamePlayer.y &&
-        spike[i].x == gamePlayer.x
-      ) {
-        //right
-        spikesTouchingPlayer.splice(1, 1, i);
-      }
-      if (
-        spikeValueAtIndexX - 1 == gamePlayer.x &&
-        spike[i].y == gamePlayer.y
-      ) {
-        //bottom
-        spikesTouchingPlayer.splice(2, 1, i);
-      }
-      if (
-        spikeValueAtIndexY + 1 == gamePlayer.y &&
-        spike[i].x == gamePlayer.x
-      ) {
-        //left
-        spikesTouchingPlayer.splice(3, 1, i);
+    if (spike[i].x == gameGoal.x && spike[i].y == gameGoal.y) {
+      console.log("Goal spawned on gameSpike" + spike[i].id);
+      let spikeToRemove = document.getElementById("gameSpike" + spike[i].id);
+      if (spikeToRemove != undefined) {
+        spikeToRemove.remove();
+        spike.splice(i, 1);
       }
     }
   }
-
   for (i = 0; i < spike.length; i++) {
-    let spikeValueAtIndexX = spike[i].x;
-    let spikeValueAtIndexY = spike[i].y;
-    if (gameGoal.y <= 15) {
-      if (spikeValueAtIndexX + 1 == gameGoal.x && spike[i].y == gameGoal.y) {
-        //top
-        spikesTouchingGoal.splice(0, 1, i);
+    if (spike[i].x == gamePlayer.x && spike[i].y == gamePlayer.y) {
+      console.log("Player spawned on gameSpike" + spike[i].id);
+      let spikeToRemove = document.getElementById("gameSpike" + spike[i].id);
+      if (spikeToRemove != undefined) {
+        spikeToRemove.remove();
+        spike.splice(i, 1);
       }
-      if (spikeValueAtIndexY - 1 == gameGoal.y && spike[i].x == gameGoal.x) {
-        //right
-        spikesTouchingGoal.splice(1, 1, i);
-      }
-      if (spikeValueAtIndexX - 1 == gameGoal.x && spike[i].y == gameGoal.y) {
-        //bottom
-        spikesTouchingGoal.splice(2, 1, i);
-      }
-      if (spikeValueAtIndexY + 1 == gameGoal.y && spike[i].x == gameGoal.x) {
-        //left
-        spikesTouchingGoal.splice(3, 1, i);
-      }
-    }
-  }
-
-  for (i = 0; i < spikesTouchingPlayer.length; i++) {
-    if (spikesTouchingPlayer[i] != null) {
-      valNotNullPlayer++;
-    }
-  }
-
-  if (valNotNullPlayer >= 3) {
-    if (spikesTouchingPlayer[1] != null) {
-      spikeToRemoveId = spikesTouchingPlayer[1];
-      spikeToRemove = document.getElementById("gameSpike" + spikeToRemoveId);
-      spikeToRemove.remove();
-      console.log("removed spike around player");
-    } else if (spikesTouchingPlayer[2] != null) {
-      spikeToRemoveId = spikesTouchingPlayer[2];
-      spikeToRemove = document.getElementById("gameSpike" + spikeToRemoveId);
-      spikeToRemove.remove();
-      console.log("removed spike around player");
-    }
-  }
-
-  for (i = 0; i < spikesTouchingGoal.length; i++) {
-    if (spikesTouchingGoal[i] != null) {
-      valNotNullGoal++;
-    }
-  }
-
-  if (valNotNullGoal >= 3) {
-    if (spikesTouchingGoal[3] != null) {
-      spikeToRemoveId = spikesTouchingGoal[3];
-      spikeToRemove = document.getElementById("gameSpike" + spikeToRemoveId);
-      spikeToRemove.remove();
-      console.log("removed spike around goal");
-    } else if (spikesTouchingGoal[0] != null) {
-      spikeToRemoveId = spikesTouchingGoal[0];
-      spikeToRemove = document.getElementById("gameSpike" + spikeToRemoveId);
-      spikeToRemove.remove();
-      console.log("removed spike around goal");
     }
   }
 }
 
+function gamePlaceOnGrid() {
+  document.getElementById("gamePlayer").style.gridArea =
+    gamePlayer.x + "/" + gamePlayer.y;
+  if (spin == 2) {
+    document.getElementById("gamePlayer").style.rotate = 90 + "deg";
+  } else if (spin == 3) {
+    document.getElementById("gamePlayer").style.rotate = 180 + "deg";
+  } else if (spin == 4) {
+    document.getElementById("gamePlayer").style.rotate = 270 + "deg";
+  }
+
+  document.getElementById("gameGoal").style.gridArea =
+    gameGoal.x + "/" + gameGoal.y;
+
+  for (i = 0; i < spike.length; i++) {
+    spikeTemp = document.createElement("div");
+    spikeTemp.classList.add("gameSpike");
+    spikeTemp.setAttribute("id", "gameSpike" + i);
+    spikeTemp.innerHTML = "*";
+    document.getElementById("gameArea").appendChild(spikeTemp);
+    document.getElementById("gameSpike" + i).style.gridArea =
+      spike[i].x + "/" + spike[i].y;
+  }
+}
+
 function gameMovement() {
+  // codeLearningGame Proj : allows player to move using 3 buttons, before moves, checks spin of player to move accordingly
   gameTurning();
   if (gameSpikeCollision()) {
   } else if (gameGoalCollision()) {
@@ -581,6 +497,7 @@ function gameMovement() {
 }
 
 function gameTurning(clicked_id) {
+  // codeLearningGame Proj : sets player rotation based on spin that player is currently at
   let x = 0;
   if (spin == 1) {
     gameSpinArray = [1, 2, 3, 4];
@@ -614,6 +531,7 @@ function gameTurning(clicked_id) {
 }
 
 function gameSpikeCollision() {
+  // codeLearningGame Proj : checks is player is going to touch spike, if they are, wont let them move (will be changed to lose life and restart)
   touchingSpike = false;
   for (i = 0; i < spike.length; i++) {
     let spikeValueAtIndexX = spike[i].x;
@@ -650,6 +568,7 @@ function gameSpikeCollision() {
 }
 
 function gameGoalCollision() {
+  // codeLearningGame Proj : checks if player is on top of goal
   touchingGoal = false;
   if (
     gameGoal.x + 1 === gamePlayer.x &&
@@ -685,73 +604,94 @@ function gameGoalCollision() {
   }
 }
 
-function areTheyTouchingSpikes() {
-  // codeLearningGame Proj : checks if a spike is touching player or goal using graph coords
-  let spikesTouchingPlayer = [],
-    spikesTouchingGoal = [];
-  for (i = 0; i < spike.length; i++) {
-    let spikeValueAtIndexX = spike[i].x;
-    let spikeValueAtIndexY = spike[i].y;
-    if (
-      gamePlayer.x === spikeValueAtIndexX + 1 &&
-      gamePlayer.y === spike[i].y
-    ) {
-      spikesTouchingPlayer.push(i);
-    }
-    if (
-      gamePlayer.x === spikeValueAtIndexX - 1 &&
-      gamePlayer.y === spike[i].y
-    ) {
-      spikesTouchingPlayer.push(i);
-    }
-    if (
-      gamePlayer.y === spikeValueAtIndexY + 1 &&
-      gamePlayer.x === spike[i].x
-    ) {
-      spikesTouchingPlayer.push(i);
-    }
-    if (
-      gamePlayer.y === spikeValueAtIndexY - 1 &&
-      gamePlayer.x === spike[i].x
-    ) {
-      spikesTouchingPlayer.push(i);
-    }
-    if (gameGoal.x === spikeValueAtIndexX + 1 && gameGoal.y === spike[i].y) {
-      spikesTouchingGoal.push(i);
-    }
-    if (gameGoal.x === spikeValueAtIndexX - 1 && gameGoal.y === spike[i].y) {
-      spikesTouchingGoal.push(i);
-    }
-    if (gameGoal.y === spikeValueAtIndexY + 1 && gameGoal.x === spike[i].x) {
-      spikesTouchingGoal.push(i);
-    }
-    if (gameGoal.y === spikeValueAtIndexY - 1 && gameGoal.x === spike[i].x) {
-      spikesTouchingGoal.push(i);
-    }
-  }
+function cellLocation(x, y, d) {
+  //used in testIfPossible to track x, y, and distance from start
+  this.x = x;
+  this.y = y;
+  this.d = d;
 }
 
-let gameMap = [];
-let gameMapRow = [];
-let testSpikes = [
-  { x: 1, y: 1 },
-  { x: 3, y: 2 },
-  { x: 5, y: 1 },
-  { x: 2, y: 2 },
-  { x: 3, y: 1 },
-];
+function testIfPossible() {
+  // codeLearningGame Proj : creates a map based on player, goal, and spike spawns, then moves through each available cell to check if the game is actually possible
+  var X = 15;
+  var Y = 15;
+  let map = Array.from(Array(X), () => Array(Y).fill(" "));
+  // map is an array the length of X, that is then filled with arrays, the length of Y, that are filled with empty spaces
+  // if .fill wasnt used, the Y arrays inside the X array, would have "empty" spaces, which can be filled but its easier to do when initializing
+  let marked = Array.from(Array(X), () => Array(Y).fill(" "));
 
-function gameMakeMap() {
-  for (i = 0; i < 5; i++) {
-    // console.log(testSpikes[i].x);
-    if (testSpikes[i].x == i + 1 && testSpikes[i].y == i + 1) {
-      gameMapRow.push("X");
-    } else if (testSpikes[i].x != i && testSpikes[i].y != i) {
-      gameMapRow.push("O");
+  for (i = 0; i < map.length; i++) {
+    // generates map the size of the gameArea, fills it with player, goal, and spike locations
+    let found = spike.filter(({ x }) => x == i + 1);
+    for (j = 0; j < found.length; j++) {
+      let y = found[j].y - 1;
+      let x = found[j].x - 1;
+      if (gamePlayer.x - 1 == x) {
+        map[x].splice(gamePlayer.y - 1, 1, "P");
+      }
+      if (gameGoal.x - 1 == x) {
+        map[x].splice(gameGoal.y - 1, 1, "G");
+      }
+      map[x].splice(y, 1, "x");
     }
-    gameMap.push(gameMapRow);
   }
-  console.log(gameMap);
-}
 
-function testIfPossible() {}
+  let start = new cellLocation(0, 0, 0);
+
+  for (i = 0; i < X; i++) {
+    //marks spikes as true in the marked map so the function doesnt try to run into them
+    for (j = 0; j < Y; j++) {
+      if (map[i][j] == "x") {
+        marked[i][j] = true;
+      } else {
+        marked[i][j] = false;
+      }
+      if (map[i][j] == "P") {
+        //sets start location using cellLocation
+        start.x = i;
+        start.y = j;
+      }
+    }
+  }
+
+  let queue = [];
+  queue.push(start); //puts start location into the queue of spots to search
+  marked[start.x][start.y] = true; // marks start so it doesnt return
+  while (queue.length != 0) {
+    //while there is something in queue, run code again
+    let current = queue[0]; // set current to first thing in queue
+    queue.shift(); // removes first thing in queue
+
+    //end
+    if (map[current.x][current.y] == "G") {
+      // if current matches with goal in the "map" sets minDistance to the current.d (which is current distance from start)
+      return true;
+    }
+
+    //up
+    if (current.x - 1 >= 0 && marked[current.x - 1][current.y] == false) {
+      // if above current isnt 0 and the location hasnt been marked, add it to queue then mark it
+      queue.push(new cellLocation(current.x - 1, current.y, current.d + 1));
+      marked[current.x - 1][current.y] = true;
+    }
+    //right
+    if (current.y + 1 < 15 && marked[current.x][current.y + 1] == false) {
+      // if to the right current isnt 0 and the location hasnt been marked, add it to queue then mark it
+      queue.push(new cellLocation(current.x, current.y + 1, current.d + 1));
+      marked[current.x][current.y + 1] = true;
+    }
+    //down
+    if (current.x + 1 < 15 && marked[current.x + 1][current.y] == false) {
+      // if below current isnt 0 and the location hasnt been marked, add it to queue then mark it
+      queue.push(new cellLocation(current.x + 1, current.y, current.d + 1));
+      marked[current.x + 1][current.y] = true;
+    }
+    //left
+    if (current.y - 1 >= 0 && marked[current.x][current.y - 1] == false) {
+      // if to the left current isnt 0 and the location hasnt been marked, add it to queue then mark it
+      queue.push(new cellLocation(current.x, current.y - 1, current.d + 1));
+      marked[current.x][current.y - 1] = true;
+    }
+  }
+  return false;
+}
