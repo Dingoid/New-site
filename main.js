@@ -703,6 +703,7 @@ let numOfButtons = 0;
 function gameButtonActions(clicked_id) {
   //dont forget to do (this.id) in html
   let buttonTemp;
+  let inputTemp;
   if (clicked_id == "gameTurnLeft") {
     buttonTemp = document.createElement("div");
     buttonTemp.classList.add("gameButtonsInPanel");
@@ -725,25 +726,36 @@ function gameButtonActions(clicked_id) {
     numOfButtons++;
   }
   if (clicked_id == "gameForLoop") {
-    //   buttonTemp = document.createElement("div");
-    //   buttonTemp.classList.add("gameButtonsInPanelFor");
-    //   buttonTemp.innerHTML = "for loop";
-    //   buttonTemp.setAttribute("id", "forLoop");
-    //   document.getElementById("rightPressedButtons").appendChild(buttonTemp);
-    // buttonTemp = document.createElement("input");
-    // buttonTemp = classList.add("forLoopInput");
-    // buttonTemp.setAttribute("type", "number");
-    // buttonTemp.setAttribute("min", "1");
-    // buttonTemp.setAttribute("max", "100");
-    // // document.getElementById("forLoop").appendChild(buttonTemp);
-    // document.getElementById("rightPressedButtons").appendChild(buttonTemp);
+    buttonTemp = document.createElement("div");
+    buttonTemp.classList.add("gameButtonsInPanelFor");
+    buttonTemp.innerHTML = "for loop";
+    document.getElementById("rightPressedButtons").appendChild(buttonTemp);
+    inputTemp = document.createElement("input");
+    inputTemp.setAttribute("type", "number");
+    inputTemp.setAttribute("min", 1);
+    inputTemp.setAttribute("max", 10);
+    inputTemp.classList.add("forLoopInput");
+    let forLoopButtons = document.querySelectorAll(".gameButtonsInPanelFor");
+    for (i = 0; i < forLoopButtons.length; i++) {
+      if (forLoopButtons[i].hasChildNodes()) {
+        console.log("has child");
+        let children = forLoopButtons[i].childNodes;
+        console.log(children);
+      }
+    }
+    // document.querySelector(".gameButtonsInPanelFor").appendChild(inputTemp);
     numOfButtons++;
   }
 }
 
-function gameButtonsClear() {
-  const pressedButtons = document.getElementById("rightPressedButtons");
-  while (pressedButtons.hasChildNodes()) {
-    pressedButtons.removeChild(pressedButtons.firstChild);
+function gameButtonsClear(clicked_id) {
+  if (clicked_id == "gameClear") {
+    const pressedButtons = document.getElementById("rightPressedButtons");
+    while (pressedButtons.hasChildNodes()) {
+      pressedButtons.removeChild(pressedButtons.firstChild);
+    }
+  } else if (clicked_id == "gameDelete") {
+    const pressedButtons = document.getElementById("rightPressedButtons");
+    pressedButtons.removeChild(pressedButtons.lastChild);
   }
 }

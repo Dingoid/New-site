@@ -349,34 +349,26 @@ button:hover {
 }
 
 .gameButtonsInPanel {
+  border: 1px solid yellow;
   background-color: #a0a0a0;
   color: white;
-  position: relative;
   height: 1.25em;
-  margin: 1% 40%;
+  width: 40%;
+  margin: auto;
   text-align: center;
 }
 
 .gameButtonsInPanelFor {
+  border: 1px solid yellow;
   background-color: #606060;
   color: white;
-  position: relative;
   height: 1.25em;
-  margin: 1% 35%;
+  width: 50%;
+  margin: auto;
   text-align: center;
 }
 
 .forLoopInput {
-  font-style: inherit;
   color: white;
   background-color: #606060;
-  border: none;
-  height: fit-content;
-  width: 25%;
-  margin-left: 20%;
-  position: relative;
-  right: 0;
-  justify-content: end;
-
-  text-align: center;
 }

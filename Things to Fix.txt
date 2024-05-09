@@ -8,11 +8,11 @@ THINGS TO LEARN/FIX OVERALL:
     fix general cs shit
 
 
-
 WHERE I LEFT OFF:
-    line(701)
+    line(728)
+        trying to append number input to for loop button to determine how many loops it makes
+        also need to figure out how i want to put things "inside" the for loop
         want to add a loop function, also when buttons are clicked and added, if they reach the bottom
-        they just start pushing everything (pretty sure its a css thing)
         idk its just kinda fucked but ill figure it out
     
 
