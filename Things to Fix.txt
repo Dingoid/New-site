@@ -9,11 +9,17 @@ THINGS TO LEARN/FIX OVERALL:
 
 
 WHERE I LEFT OFF:
-    line(728)
-        trying to append number input to for loop button to determine how many loops it makes
-        also need to figure out how i want to put things "inside" the for loop
-        want to add a loop function, also when buttons are clicked and added, if they reach the bottom
-        idk its just kinda fucked but ill figure it out
+    line(452)
+        gave up on the for loop idea for now, want to implement actual movement first
+
+        found potential problem with the delete and clear where if you're over 33 button presses it will only delete or clear the left panel (easy fix but brain broken rn)
+
+        i think movement will work where i set current move to first thing is "gamePressedButtons" array, then shift it to remove it from array, then based on what the input is
+            i will do that movement, i can probably salvage the "current" movement system to save myself a lot of rewriting tho
+
+        also want to add delay to movement actions so the player can actually watch it happen instead of it being instant
+        
+        also having the panels set to 33 inputs each will cause problems with css scaling later but that can be fixed later
     
 
     after that i need to make the movement system actually work

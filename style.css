@@ -318,6 +318,7 @@ button:hover {
   flex-direction: column;
   justify-content: space-around;
   position: relative;
+  border: 1px solid green;
 }
 
 .rightTopButtons {
@@ -329,8 +330,21 @@ button:hover {
   height: 5%;
 }
 
-.rightPressedButtons {
+.rightPressedButtonsPanel {
   border: 1px solid red;
+  height: 100%;
+  display: flex;
+}
+
+.pressedLeftPanel {
+  border: 1px solid green;
+  width: 50%;
+  height: 100%;
+}
+
+.pressedRightPanel {
+  border: 1px solid blue;
+  width: 50%;
   height: 100%;
 }
 
@@ -350,25 +364,10 @@ button:hover {
 
 .gameButtonsInPanel {
   border: 1px solid yellow;
-  background-color: #a0a0a0;
+  background-color: #808080;
   color: white;
   height: 1.25em;
-  width: 40%;
-  margin: auto;
+  width: 90%;
+  margin: 1% auto;
   text-align: center;
-}
-
-.gameButtonsInPanelFor {
-  border: 1px solid yellow;
-  background-color: #606060;
-  color: white;
-  height: 1.25em;
-  width: 50%;
-  margin: auto;
-  text-align: center;
-}
-
-.forLoopInput {
-  color: white;
-  background-color: #606060;
 }

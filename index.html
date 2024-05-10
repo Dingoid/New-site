@@ -47,33 +47,29 @@
             <button
               id="gameTurnLeft"
               class="gameButton"
-              onclick="gameButtonActions(this.id), gameTurning(this.id)"
+              onclick="gameButtonActions(this.id)"
             >
               turn left
             </button>
             <button
               id="gameMoveForward"
               class="gameButton"
-              onclick="gameButtonActions(this.id), gameMovement()"
+              onclick="gameButtonActions(this.id)"
             >
               forward
             </button>
             <button
               id="gameTurnRight"
               class="gameButton"
-              onclick="gameButtonActions(this.id), gameTurning(this.id)"
+              onclick="gameButtonActions(this.id)"
             >
               turn right
             </button>
-            <button
-              id="gameForLoop"
-              class="gameButton"
-              onclick="gameButtonActions(this.id) "
-            >
-              for loop
-            </button>
           </div>
-          <div id="rightPressedButtons" class="rightPressedButtons"></div>
+          <div id="rightPressedButtonsPanel" class="rightPressedButtonsPanel">
+            <div id="pressedLeftPanel" class="pressedLeftPanel"></div>
+            <div id="pressedRightPanel" class="pressedRightPanel"></div>
+          </div>
           <div class="rightBottomButtons">
             <button
               id="gameClear"
@@ -89,7 +85,7 @@
             >
               delete
             </button>
-            <button class="gameButton">go</button>
+            <button class="gameButton" onclick="gameMovement()">go</button>
           </div>
         </div>
       </div>
