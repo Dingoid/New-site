@@ -451,51 +451,64 @@ function gamePlaceOnGrid() {
 
 function gameMovement() {
   // codeLearningGame Proj : allows player to move using 3 buttons, before moves, checks spin of player to move accordingly
-  gameTurning();
-  if (gameSpikeCollision()) {
-  } else if (gameGoalCollision()) {
-    if (spin == 1) {
-      document.getElementById("gamePlayer").style.gridRow = gamePlayer.x - 1;
-    } else if (spin == 2) {
-      document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y + 1;
-    } else if (spin == 3) {
-      document.getElementById("gamePlayer").style.gridRow = gamePlayer.x + 1;
-    } else if (spin == 4) {
-      document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y - 1;
+  if (gameButtonsPressed.length > 0) {
+    while (gameButtonsPressed.length > 0) {
+      console.log("work");
+      let currentMove = gameButtonsPressed[0];
+      gameButtonsPressed.shift();
+      const pressedButtons = document.getElementById("pressedLeftPanel");
+      pressedButtons.removeChild(pressedButtons.firstChild);
+      console.log(currentMove);
     }
-    if (gameGoal.x == gamePlayer.x && gameGoal.y == gamePlayer.y) {
-      console.log("you win");
-    }
-    console.log("you win");
-  } else if (gamePlayer.x <= 15 && gamePlayer.y <= 15) {
-    if (spin == 1) {
-      document.getElementById("gamePlayer").style.gridRow = gamePlayer.x - 1;
-      gamePlayer.x--;
-    } else if (spin == 2) {
-      document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y + 1;
-      gamePlayer.y++;
-    } else if (spin == 3) {
-      document.getElementById("gamePlayer").style.gridRow = gamePlayer.x + 1;
-      gamePlayer.x++;
-    } else if (spin == 4) {
-      document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y - 1;
-      gamePlayer.y--;
-    }
-    if (gamePlayer.x == 0) {
-      gamePlayer.x = 1;
-    }
-    if (gamePlayer.x == 16) {
-      document.getElementById("gamePlayer").style.gridRow = gamePlayer.x - 1;
-      gamePlayer.x = 15;
-    }
-    if (gamePlayer.y == 0) {
-      gamePlayer.y = 1;
-    }
-    if (gamePlayer.y >= 16) {
-      document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y - 1;
-      gamePlayer.y = 15;
-    }
+  } else {
+    console.log("not work");
   }
+
+  // gameTurning();
+  // if (gameSpikeCollision()) {
+  // } else if (gameGoalCollision()) {
+  //   if (spin == 1) {
+  //     document.getElementById("gamePlayer").style.gridRow = gamePlayer.x - 1;
+  //   } else if (spin == 2) {
+  //     document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y + 1;
+  //   } else if (spin == 3) {
+  //     document.getElementById("gamePlayer").style.gridRow = gamePlayer.x + 1;
+  //   } else if (spin == 4) {
+  //     document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y - 1;
+  //   }
+  //   if (gameGoal.x == gamePlayer.x && gameGoal.y == gamePlayer.y) {
+  //     console.log("you win");
+  //   }
+  //   console.log("you win");
+  // } else if (gamePlayer.x <= 15 && gamePlayer.y <= 15) {
+  //   if (spin == 1) {
+  //     document.getElementById("gamePlayer").style.gridRow = gamePlayer.x - 1;
+  //     gamePlayer.x--;
+  //   } else if (spin == 2) {
+  //     document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y + 1;
+  //     gamePlayer.y++;
+  //   } else if (spin == 3) {
+  //     document.getElementById("gamePlayer").style.gridRow = gamePlayer.x + 1;
+  //     gamePlayer.x++;
+  //   } else if (spin == 4) {
+  //     document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y - 1;
+  //     gamePlayer.y--;
+  //   }
+  //   if (gamePlayer.x == 0) {
+  //     gamePlayer.x = 1;
+  //   }
+  //   if (gamePlayer.x == 16) {
+  //     document.getElementById("gamePlayer").style.gridRow = gamePlayer.x - 1;
+  //     gamePlayer.x = 15;
+  //   }
+  //   if (gamePlayer.y == 0) {
+  //     gamePlayer.y = 1;
+  //   }
+  //   if (gamePlayer.y >= 16) {
+  //     document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y - 1;
+  //     gamePlayer.y = 15;
+  //   }
+  // }
 }
 
 function gameTurning(clicked_id) {
@@ -698,64 +711,68 @@ function testIfPossible() {
   return false;
 }
 
-let numOfButtons = 0;
+let gameButtonsPressed = [];
 
 function gameButtonActions(clicked_id) {
-  //dont forget to do (this.id) in html
   let buttonTemp;
-  let inputTemp;
-  if (clicked_id == "gameTurnLeft") {
-    buttonTemp = document.createElement("div");
-    buttonTemp.classList.add("gameButtonsInPanel");
-    buttonTemp.innerHTML = "turn left";
-    document.getElementById("rightPressedButtons").appendChild(buttonTemp);
-    numOfButtons++;
-  }
-  if (clicked_id == "gameMoveForward") {
-    buttonTemp = document.createElement("div");
-    buttonTemp.classList.add("gameButtonsInPanel");
-    buttonTemp.innerHTML = "forward";
-    document.getElementById("rightPressedButtons").appendChild(buttonTemp);
-    numOfButtons++;
-  }
-  if (clicked_id == "gameTurnRight") {
-    buttonTemp = document.createElement("div");
-    buttonTemp.classList.add("gameButtonsInPanel");
-    buttonTemp.innerHTML = "turn right";
-    document.getElementById("rightPressedButtons").appendChild(buttonTemp);
-    numOfButtons++;
-  }
-  if (clicked_id == "gameForLoop") {
-    buttonTemp = document.createElement("div");
-    buttonTemp.classList.add("gameButtonsInPanelFor");
-    buttonTemp.innerHTML = "for loop";
-    document.getElementById("rightPressedButtons").appendChild(buttonTemp);
-    inputTemp = document.createElement("input");
-    inputTemp.setAttribute("type", "number");
-    inputTemp.setAttribute("min", 1);
-    inputTemp.setAttribute("max", 10);
-    inputTemp.classList.add("forLoopInput");
-    let forLoopButtons = document.querySelectorAll(".gameButtonsInPanelFor");
-    for (i = 0; i < forLoopButtons.length; i++) {
-      if (forLoopButtons[i].hasChildNodes()) {
-        console.log("has child");
-        let children = forLoopButtons[i].childNodes;
-        console.log(children);
-      }
+  if (gameButtonsPressed.length < 33) {
+    if (clicked_id == "gameTurnLeft") {
+      buttonTemp = document.createElement("div");
+      buttonTemp.classList.add("gameButtonsInPanel");
+      buttonTemp.innerHTML = "turn left";
+      document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
+      gameButtonsPressed.push(clicked_id);
     }
-    // document.querySelector(".gameButtonsInPanelFor").appendChild(inputTemp);
-    numOfButtons++;
+    if (clicked_id == "gameMoveForward") {
+      buttonTemp = document.createElement("div");
+      buttonTemp.classList.add("gameButtonsInPanel");
+      buttonTemp.innerHTML = "forward";
+      document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
+      gameButtonsPressed.push(clicked_id);
+    }
+    if (clicked_id == "gameTurnRight") {
+      buttonTemp = document.createElement("div");
+      buttonTemp.classList.add("gameButtonsInPanel");
+      buttonTemp.innerHTML = "turn right";
+      document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
+      gameButtonsPressed.push(clicked_id);
+    }
+  }
+  if (gameButtonsPressed.length >= 33 && gameButtonsPressed.length < 66) {
+    if (clicked_id == "gameTurnLeft") {
+      buttonTemp = document.createElement("div");
+      buttonTemp.classList.add("gameButtonsInPanel");
+      buttonTemp.innerHTML = "turn left";
+      document.getElementById("pressedRightPanel").appendChild(buttonTemp);
+      gameButtonsPressed.push(clicked_id);
+    }
+    if (clicked_id == "gameMoveForward") {
+      buttonTemp = document.createElement("div");
+      buttonTemp.classList.add("gameButtonsInPanel");
+      buttonTemp.innerHTML = "forward";
+      document.getElementById("pressedRightPanel").appendChild(buttonTemp);
+      gameButtonsPressed.push(clicked_id);
+    }
+    if (clicked_id == "gameTurnRight") {
+      buttonTemp = document.createElement("div");
+      buttonTemp.classList.add("gameButtonsInPanel");
+      buttonTemp.innerHTML = "turn right";
+      document.getElementById("pressedRightPanel").appendChild(buttonTemp);
+      gameButtonsPressed.push(clicked_id);
+    }
   }
 }
 
 function gameButtonsClear(clicked_id) {
   if (clicked_id == "gameClear") {
-    const pressedButtons = document.getElementById("rightPressedButtons");
+    const pressedButtons = document.getElementById("pressedLeftPanel");
     while (pressedButtons.hasChildNodes()) {
       pressedButtons.removeChild(pressedButtons.firstChild);
+      gameButtonsPressed.pop();
     }
-  } else if (clicked_id == "gameDelete") {
-    const pressedButtons = document.getElementById("rightPressedButtons");
+  } else if (clicked_id == "gameDelete" && gameButtonsPressed.length >= 1) {
+    const pressedButtons = document.getElementById("pressedLeftPanel");
     pressedButtons.removeChild(pressedButtons.lastChild);
+    gameButtonsPressed.pop();
   }
 }
