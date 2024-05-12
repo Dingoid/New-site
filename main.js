@@ -451,17 +451,39 @@ function gamePlaceOnGrid() {
 
 function gameMovement() {
   // codeLearningGame Proj : allows player to move using 3 buttons, before moves, checks spin of player to move accordingly
+
+  //current move to first index of buttons pressed, runs gameTurning to make sure player moves right way, does movement, at end of function, uses gameSpike
+  //collision to check if player is ontop of spike then set variable to true or something, then at start of function again, checks if variable is true
+  //if it is, game sets player back to inital spawn and loses life
+
+  // also need to look at gameGoalCollision again
+
   if (gameButtonsPressed.length > 0) {
     while (gameButtonsPressed.length > 0) {
-      console.log("work");
       let currentMove = gameButtonsPressed[0];
       gameButtonsPressed.shift();
       const pressedButtons = document.getElementById("pressedLeftPanel");
       pressedButtons.removeChild(pressedButtons.firstChild);
-      console.log(currentMove);
+
+      if (spin == 1 && currentMove == "gameMoveForward") {
+        document.getElementById("gamePlayer").style.gridRow = gamePlayer.x - 1;
+      } else if (spin == 2 && currentMove == "gameMoveForward") {
+        document.getElementById("gamePlayer").style.gridColumn =
+          gamePlayer.y + 1;
+      } else if (spin == 3 && currentMove == "gameMoveForward") {
+        document.getElementById("gamePlayer").style.gridRow = gamePlayer.x + 1;
+      } else if (spin == 4 && currentMove == "gameMoveForward") {
+        document.getElementById("gamePlayer").style.gridColumn =
+          gamePlayer.y - 1;
+      }
+
+      if (currentMove == "gameTurnRight" || currentMove == "gameTurnLeft") {
+        gameTurning(currentMove);
+      }
+
+      // if (gameSpikeCollision()) {
+      // }
     }
-  } else {
-    console.log("not work");
   }
 
   // gameTurning();
@@ -511,7 +533,7 @@ function gameMovement() {
   // }
 }
 
-function gameTurning(clicked_id) {
+function gameTurning(currentMove) {
   // codeLearningGame Proj : sets player rotation based on spin that player is currently at
   let x = 0;
   if (spin == 1) {
@@ -524,11 +546,11 @@ function gameTurning(clicked_id) {
     gameSpinArray = [4, 1, 2, 3];
   }
 
-  if (clicked_id == "gameTurnLeft") {
+  if (currentMove == "gameTurnLeft") {
     x = gameSpinArray.pop();
     gameSpinArray.unshift(x);
     spin = gameSpinArray[0];
-  } else if (clicked_id == "gameTurnRight") {
+  } else if (currentMove == "gameTurnRight") {
     x = gameSpinArray.shift();
     gameSpinArray.push(x);
     spin = gameSpinArray[0];

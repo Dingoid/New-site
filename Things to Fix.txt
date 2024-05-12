@@ -12,6 +12,8 @@ WHERE I LEFT OFF:
     line(452)
         gave up on the for loop idea for now, want to implement actual movement first
 
+        also have to change the touchingSpike function to allow the player to touch them instead of stopping movement
+
         found potential problem with the delete and clear where if you're over 33 button presses it will only delete or clear the left panel (easy fix but brain broken rn)
 
         i think movement will work where i set current move to first thing is "gamePressedButtons" array, then shift it to remove it from array, then based on what the input is
