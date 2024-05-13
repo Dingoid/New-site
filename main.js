@@ -26,7 +26,8 @@ let currentIndex = -1,
   spikeArrayTemp = [],
   spike = [],
   gameGoal,
-  gamePlayer;
+  gamePlayer,
+  gamePlayerStart;
 const aimBallButtons = ["aimOne", "aimTwo", "aimThree"],
   aimDifficultyButtons = ["aimEasy", "aimMedium", "aimHard"],
   colorNames = ["Blue", "Red", "Yellow", "Green", "Pink", "Purple"],
@@ -311,7 +312,6 @@ function gameStart() {
     gamePlaceOnGrid();
     gameSpawnedOnSpike();
   } else {
-    console.log("not possible");
     gameStart();
   }
 }
@@ -342,6 +342,7 @@ function gameRandomPlayerSpawn() {
   let y = Math.floor(min + Math.random() * (max - min + 1));
   spin = Math.floor(minSpin + Math.random() * (maxSpin - minSpin + 1));
   gamePlayer = { x: x, y: y };
+  gamePlayerStart = { x: gamePlayer.x, y: gamePlayer.y };
 }
 
 function gameNumberOfSpike() {
@@ -358,8 +359,7 @@ function gameNumberOfSpike() {
 }
 
 function gameRandomSpikeSpawn(clicked_id) {
-  console.log("spawning spikes");
-  // codeLearningGame Proj : spawns spike in random grid space, logs all the coords, then if a spike spawns ontop of another spike, deletes later spike
+  // codeLearningGame Proj : spawns spike in random grid space, logs all the coords, then if a spike spawns on top of another spike, deletes later spike
   spike = [];
   buttonID = clicked_id;
   gameNumberOfSpike();
@@ -399,7 +399,7 @@ function gameRandomSpikeSpawn(clicked_id) {
 }
 
 function gameSpawnedOnSpike() {
-  // codeLearningGame Proj : checks if player or goal spawns ontop of spike, if it does, deletes it
+  // codeLearningGame Proj : checks if player or goal spawns on top of spike, if it does, deletes it
   for (i = 0; i < spike.length; i++) {
     if (spike[i].x == gameGoal.x && spike[i].y == gameGoal.y) {
       console.log("Goal spawned on gameSpike" + spike[i].id);
@@ -453,40 +453,46 @@ function gameMovement() {
   // codeLearningGame Proj : allows player to move using 3 buttons, before moves, checks spin of player to move accordingly
 
   //current move to first index of buttons pressed, runs gameTurning to make sure player moves right way, does movement, at end of function, uses gameSpike
-  //collision to check if player is ontop of spike then set variable to true or something, then at start of function again, checks if variable is true
-  //if it is, game sets player back to inital spawn and loses life
+  //collision to check if player is on top of spike then set variable to true or something, then at start of function again, checks if variable is true
+  //if it is, game sets player back to initial spawn and loses life
 
   // also need to look at gameGoalCollision again
 
-  if (gameButtonsPressed.length > 0) {
-    while (gameButtonsPressed.length > 0) {
-      let currentMove = gameButtonsPressed[0];
-      gameButtonsPressed.shift();
-      const pressedButtons = document.getElementById("pressedLeftPanel");
-      pressedButtons.removeChild(pressedButtons.firstChild);
+  let i = gameButtonsPressed.length;
+  let movementDelay = setInterval(() => {
+    i--;
 
-      if (spin == 1 && currentMove == "gameMoveForward") {
-        document.getElementById("gamePlayer").style.gridRow = gamePlayer.x - 1;
-      } else if (spin == 2 && currentMove == "gameMoveForward") {
-        document.getElementById("gamePlayer").style.gridColumn =
-          gamePlayer.y + 1;
-      } else if (spin == 3 && currentMove == "gameMoveForward") {
-        document.getElementById("gamePlayer").style.gridRow = gamePlayer.x + 1;
-      } else if (spin == 4 && currentMove == "gameMoveForward") {
-        document.getElementById("gamePlayer").style.gridColumn =
-          gamePlayer.y - 1;
-      }
+    let currentMove = gameButtonsPressed[0];
+    console.log(currentMove);
+    gameButtonsPressed.shift();
+    const pressedButtons = document.getElementById("pressedLeftPanel");
+    pressedButtons.removeChild(pressedButtons.firstChild);
 
-      if (currentMove == "gameTurnRight" || currentMove == "gameTurnLeft") {
-        gameTurning(currentMove);
-      }
-
-      // if (gameSpikeCollision()) {
-      // }
+    if (spin == 1 && currentMove == "gameMoveForward") {
+      document.getElementById("gamePlayer").style.gridRow = gamePlayer.x - 1;
+      gamePlayer.x -= 1;
+    } else if (spin == 2 && currentMove == "gameMoveForward") {
+      document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y + 1;
+      gamePlayer.y += 1;
+    } else if (spin == 3 && currentMove == "gameMoveForward") {
+      document.getElementById("gamePlayer").style.gridRow = gamePlayer.x + 1;
+      gamePlayer.x += 1;
+    } else if (spin == 4 && currentMove == "gameMoveForward") {
+      document.getElementById("gamePlayer").style.gridColumn = gamePlayer.y - 1;
+      gamePlayer.y -= 1;
     }
-  }
 
-  // gameTurning();
+    if (currentMove == "gameTurnRight" || currentMove == "gameTurnLeft") {
+      gameTurning(currentMove);
+    }
+
+    console.log("x: " + gamePlayer.x + " y: " + gamePlayer.y);
+
+    if (i == 0) {
+      clearInterval(movementDelay);
+    }
+  }, 750);
+
   // if (gameSpikeCollision()) {
   // } else if (gameGoalCollision()) {
   //   if (spin == 1) {
@@ -654,7 +660,7 @@ function testIfPossible() {
   var Y = 15;
   let map = Array.from(Array(X), () => Array(Y).fill(" "));
   // map is an array the length of X, that is then filled with arrays, the length of Y, that are filled with empty spaces
-  // if .fill wasnt used, the Y arrays inside the X array, would have "empty" spaces, which can be filled but its easier to do when initializing
+  // if .fill wasn't used, the Y arrays inside the X array, would have "empty" spaces, which can be filled but its easier to do when initializing
   let marked = Array.from(Array(X), () => Array(Y).fill(" "));
 
   for (i = 0; i < map.length; i++) {
@@ -676,7 +682,7 @@ function testIfPossible() {
   let start = new cellLocation(0, 0, 0);
 
   for (i = 0; i < X; i++) {
-    //marks spikes as true in the marked map so the function doesnt try to run into them
+    //marks spikes as true in the marked map so the function doesn't try to run into them
     for (j = 0; j < Y; j++) {
       if (map[i][j] == "x") {
         marked[i][j] = true;
@@ -693,7 +699,7 @@ function testIfPossible() {
 
   let queue = [];
   queue.push(start); //puts start location into the queue of spots to search
-  marked[start.x][start.y] = true; // marks start so it doesnt return
+  marked[start.x][start.y] = true; // marks start so it doesn't return
   while (queue.length != 0) {
     //while there is something in queue, run code again
     let current = queue[0]; // set current to first thing in queue
@@ -707,19 +713,19 @@ function testIfPossible() {
 
     //up
     if (current.x - 1 >= 0 && marked[current.x - 1][current.y] == false) {
-      // if above current isnt 0 and the location hasnt been marked, add it to queue then mark it
+      // if above current isn't 0 and the location hasn't been marked, add it to queue then mark it
       queue.push(new cellLocation(current.x - 1, current.y, current.d + 1));
       marked[current.x - 1][current.y] = true;
     }
     //right
     if (current.y + 1 < 15 && marked[current.x][current.y + 1] == false) {
-      // if to the right current isnt 0 and the location hasnt been marked, add it to queue then mark it
+      // if to the right current isn't 0 and the location hasn't been marked, add it to queue then mark it
       queue.push(new cellLocation(current.x, current.y + 1, current.d + 1));
       marked[current.x][current.y + 1] = true;
     }
     //down
     if (current.x + 1 < 15 && marked[current.x + 1][current.y] == false) {
-      // if below current isnt 0 and the location hasnt been marked, add it to queue then mark it
+      // if below current isn't 0 and the location hasnt been marked, add it to queue then mark it
       queue.push(new cellLocation(current.x + 1, current.y, current.d + 1));
       marked[current.x + 1][current.y] = true;
     }
