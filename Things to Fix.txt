@@ -7,53 +7,48 @@ OVERALL THINGS TO LEARN/FIX:
 
     fix general cs shit
 
+    basic CRUD app add to website
+
+    put contact info and stuff on either top or bottom of projects
+
 
 WHAT I DID TODAY: 
-    movement now finally works with delay and it removes actions from queue as they happen
+    fixed collision
+    
+    return player to initial spawn when they touch spike
+
+    set numOfSpikes to a static 100
+
+    fixed movement and collision bug
+
+    lives and levels implemented
+
+    clear, delete, and go can no longer be spammed and break the game
+
+    only one set of actions per level implemented
 
 
 WHERE I LEFT OFF:
     line(452)
-        movement finally works as intended, now need to rework collision and completion
-
-        after collision is added, if player touches spikes move them back to starting point (starting point already added)
-            and lose a life (lives not added)
-
-        also have to change the touchingSpike function to allow the player to touch them instead of stopping movement
-
         found potential problem with the delete and clear where if you're over 33 button presses it will only delete or clear the left panel (easy fix but brain broken rn)
 
         also having the panels set to 33 inputs each will cause problems with css scaling later but that can be fixed later
     
 
 CODING GAME NEEDS: (not sorted)
-    goal collision detection
-        (if player runs into goal, move to next level and generate new layout)
-        (!! HALF DONE !!) (it throws a console.log but it doesnt like actually do anything but its hooked up)
 
-    player movement
-        (start with buttons to move, then make player actions get stored until go button is pressed)
-        (!! HALF DONE !!) (player moves on button press and turns but the whole "store actions until go" thing isnt yet)
-        (this will probably be last cause it makes testing harder)
-    
+    For loop?
+        (maybe i come back to the idea to introduce a for loop to cut down on actions, but need to style one first)
+        (i have no idea how i even want it to look which is problem #1)
+
     Clean JS 
         (there are a lot of functions written inside of other functions instead of just called in them, should take them out and just call them instead)
         (also move all the variables to the top)
         (specifically the gameStart function)
 
-    timer
-        (from start of first level to end of last level, then post time to screen)
-        (dont know if i want this or like "how many actions did it take you" and i introduce like rudimentary for loop thing)
-
-    lives
-        (if player hits spike and loses life, remove life, if lives = -1, game over and full reset)
-
-    Num of Spikes on button
-        (did work previously, but got rid of buttons and its now hard coded)
-        (will probably be worded as like "easy, medium, hard" because the num of spikes changes so much based on spawns)
-
-    start button ----- (*DONE* kinda, its the move player/goal button rn, still needs to be CSS'd)
-        (start button that spawns everything and makes background visible)
+    Start screen
+        (start button on a background that starts the game and makes everything visible)
+        (then when player loses, takes them back to that screen)
 
     Sprites
         (probably just rip shit off google or whatever, just somethin better than boxes)
@@ -63,6 +58,5 @@ CODING GAME NEEDS: (not sorted)
         (timer i think would work better than minimum actions because of the randomly generated maps)
         (or i could do a "how close to perfect were you" id have to make a system to count actions including turns tho)
             (i think i like the "close to perfect" more than time)
-
-    Levels system
-        (you only beat the game after you clear idk 3 levels or somethin)
+            (then after the 3 levels it tells you like how close to overall perfect you were)
+            (for loops would also let you move below the minimum moves which would make it like golf scoring)
