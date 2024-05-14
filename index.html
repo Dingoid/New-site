@@ -16,21 +16,28 @@
       <button class="scrollBall"></button>
       <button class="scrollBall"></button>
     </div>
+
     <section>
       <h1 class="projHeader">code teaching game</h1>
       <div class="proj proj3">
         <div class="leftPanel">
-          <div class="leftInfo">level :</div>
-          <div class="leftInfo">lives :</div>
+          <div id="gameLevel" class="leftInfo">level : 1</div>
+          <div class="leftInfo gameLives">
+            lives :
+            <div id="gameHeart1" class="heart"><3</div>
+            <div id="gameHeart2" class="heart"><3</div>
+            <div id="gameHeart3" class="heart"><3</div>
+          </div>
           <div class="leftInfo">time :</div>
           <div class="gameLeftButtons">
-            <button class="gameButton" onclick="gameStart()">
-              move player/goal
+            <button class="gameButton" onclick="gameTesting()">
+              Test Button
             </button>
-            <button class="gameButton" onclick="">test if work</button>
           </div>
         </div>
         <div id="gameArea" class="gameArea">
+          <h1 id="lifeLost" class="lifeLost">You Died</h1>
+          <h1 id="gameWon" class="gameWon">You Won</h1>
           <!-- <button id="gameStartButton" class="gameStartButton">Start</button> -->
           <div id="gamePlayer" class="gamePlayer">^</div>
           <div id="gameGoal" class="gameGoal"></div>
