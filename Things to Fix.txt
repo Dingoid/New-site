@@ -13,24 +13,11 @@ OVERALL THINGS TO LEARN/FIX:
 
 
 WHAT I DID TODAY: 
-    fixed collision
-    
-    return player to initial spawn when they touch spike
+    clear and delete now work as intended if number of actions is larger than 33
 
-    set numOfSpikes to a static 100
-
-    fixed movement and collision bug
-
-    lives and levels implemented
-
-    clear, delete, and go can no longer be spammed and break the game
-
-    only one set of actions per level implemented
 
 
 WHERE I LEFT OFF:
-    line(452)
-        found potential problem with the delete and clear where if you're over 33 button presses it will only delete or clear the left panel (easy fix but brain broken rn)
 
         also having the panels set to 33 inputs each will cause problems with css scaling later but that can be fixed later
     
