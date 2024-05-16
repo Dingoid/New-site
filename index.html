@@ -7,9 +7,7 @@
 		<link rel="stylesheet" href="style.css" />
 		<script src="main.js"></script>
 	</head>
-	<body
-		onload="colorChange(), aimSettingsOpenClosed(), settingsChange(), gameStart() ,testIfPossible()"
-	>
+	<body onload="colorChange(), aimSettingsOpenClosed(), settingsChange()">
 		<div class="customScroll">
 			<button class="scrollBall"></button>
 			<button class="scrollBall"></button>
@@ -34,8 +32,15 @@
 						</button>
 					</div>
 				</div>
-
 				<div id="gameArea" class="gameArea">
+					<button
+						id="gameStartButton"
+						class="gameStartButton"
+						anchor="gameArea"
+						onclick="gameStart() ,testIfPossible()"
+					>
+						Start
+					</button>
 					<h1 id="lifeLost" class="lifeLost">You Died</h1>
 					<h1 id="gameWon" class="gameWon">You Won</h1>
 					<div id="gamePlayer" class="gamePlayer">^</div>

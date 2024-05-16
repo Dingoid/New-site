@@ -303,6 +303,12 @@ function aimRandomPoint() {
 
 function gameStart() {
 	// codeLearningGame Proj : starts the game on button press
+	document.getElementById("gameStartButton").style.visibility = "hidden";
+	document.getElementById("gameStartButton").style.zIndex = -10;
+	document.getElementById("gameWon").style.zIndex = -50;
+	document.getElementById("lifeLost").style.zIndex = -50;
+	document.getElementById("gamePlayer").style.visibility = "visible";
+	document.getElementById("gameGoal").style.visibility = "visible";
 	gameLives = 3;
 	numOfSpikes = 100;
 	for (i = 0; i < numOfSpikes; i++) {
@@ -519,7 +525,7 @@ function gameMovement() {
 
 			if (i == 0 && gameGoalCollision() && !gameSpikeCollision()) {
 				clearInterval(movementDelay);
-				gameInProgress = 0;
+
 				gameWonFade();
 				gameButtonsPressed = [];
 				i = 0;
@@ -527,22 +533,22 @@ function gameMovement() {
 					pressedButtons.removeChild(pressedButtons.firstChild);
 				}
 				setTimeout(() => {
+					gameInProgress = 0;
 					gameStart();
 					gameWonLevel();
 				}, 2400);
 			} else if (i == 0 && !gameGoalCollision() && gameSpikeCollision()) {
 				clearInterval(movementDelay);
-				gameInProgress = 0;
 				gameButtonsPressed = [];
 				i = 0;
 			} else if (i == 0 && !gameGoalCollision() && !gameSpikeCollision()) {
 				clearInterval(movementDelay);
-				gameInProgress = 0;
 				gameButtonsPressed = [];
 				i = 0;
 				gameLostLife();
 				gameDeathFade();
 				setTimeout(() => {
+					gameInProgress = 0;
 					document.getElementById("gamePlayer").style.gridArea =
 						gamePlayerStart.x + " / " + gamePlayerStart.y;
 					gamePlayer.x = gamePlayerStart.x;
@@ -550,13 +556,33 @@ function gameMovement() {
 					spin = spinStart;
 					gameTurning();
 					document.getElementById("gamePlayer").style.opacity = 0;
-					if (gameLives == 0) {
-						gameStart();
-					}
+					// if (gameLives == 0) {
+					// 	gameResetBoard();
+					// }
+				}, 2400);
+			}
+			if (gameLives == 0) {
+				setTimeout(() => {
+					gameResetBoard();
 				}, 2400);
 			}
 		}, 750);
 	}
+}
+
+function gameResetBoard() {
+	document.getElementById("gameStartButton").style.visibility = "visible";
+	document.getElementById("gameStartButton").style.zIndex = 50;
+	gameLives = 3;
+	numOfSpikes = 100;
+	for (i = 0; i < numOfSpikes; i++) {
+		let spikeToRemove = document.getElementById("gameSpike" + i);
+		if (spikeToRemove != undefined) {
+			spikeToRemove.remove();
+		}
+	}
+	document.getElementById("gamePlayer").style.visibility = "hidden";
+	document.getElementById("gameGoal").style.visibility = "hidden";
 }
 
 function gameTurning(currentMove) {
@@ -627,6 +653,7 @@ function gameWonLevel() {
 }
 
 function gameWonFade() {
+	document.getElementById("gameWon").style.zIndex = 50;
 	let i = 0;
 	let wonOpacity = 0;
 	let wonFadeIn = setInterval(() => {
@@ -654,6 +681,7 @@ function gameWonFade() {
 }
 
 function gameDeathFade() {
+	document.getElementById("lifeLost").style.zIndex = 50;
 	let i = 0;
 	let lifeOpacity = 0;
 	let lifeLostFadeIn = setInterval(() => {
@@ -798,7 +826,7 @@ function testIfPossible() {
 
 function gameButtonActions(clicked_id) {
 	let buttonTemp;
-	if (gameButtonsPressed.length < 33) {
+	if (gameButtonsPressed.length < 33 && gameInProgress == 0) {
 		if (clicked_id == "gameTurnLeft") {
 			buttonTemp = document.createElement("div");
 			buttonTemp.classList.add("gameButtonsInPanel");
@@ -821,7 +849,11 @@ function gameButtonActions(clicked_id) {
 			gameButtonsPressed.push(clicked_id);
 		}
 	}
-	if (gameButtonsPressed.length >= 33 && gameButtonsPressed.length < 66) {
+	if (
+		gameButtonsPressed.length >= 33 &&
+		gameButtonsPressed.length < 66 &&
+		gameInProgress == 0
+	) {
 		if (clicked_id == "gameTurnLeft") {
 			buttonTemp = document.createElement("div");
 			buttonTemp.classList.add("gameButtonsInPanel");
@@ -844,7 +876,6 @@ function gameButtonActions(clicked_id) {
 			gameButtonsPressed.push(clicked_id);
 		}
 	}
-	console.log("adding : " + gameButtonsPressed.length);
 }
 
 function gameButtonsClear(clicked_id) {
@@ -884,5 +915,4 @@ function gameButtonsClear(clicked_id) {
 			gameButtonsPressed.pop();
 		}
 	}
-	console.log("deleteing : " + gameButtonsPressed.length);
 }
