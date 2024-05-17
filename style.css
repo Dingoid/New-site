@@ -6,6 +6,12 @@ body {
 	overflow-x: hidden;
 }
 
+* {
+	margin: 0;
+	font-weight: bold;
+	user-select: none;
+}
+
 .customScroll {
 	display: flex;
 	justify-content: space-evenly;
@@ -33,11 +39,6 @@ body {
 
 body::-webkit-scrollbar {
 	display: none;
-}
-
-* {
-	margin: 0;
-	font-weight: bold;
 }
 
 .projHeader {
@@ -278,6 +279,10 @@ button:hover {
 .heart {
 	position: relative;
 	color: red;
+}
+
+.gameHighScore {
+	text-align: center;
 }
 
 .gameLeftButtons {

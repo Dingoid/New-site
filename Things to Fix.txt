@@ -13,26 +13,35 @@ OVERALL THINGS TO LEARN/FIX:
 
 
 WHAT I DID TODAY:
+    movement buttons can no longer be pressed before game has started or while player is moving
 
-    start screen added
+    reordered some JS
+    
+    player now cant press buttons while they are dying
 
-    game sets you back to start screen on game over
 
+IMMEDIATE PROBLEMS (sorted): 
+    if player selects over 33 actions, movement breaks cause it doesnt remove them from right side
+
+    goal detection is fucked
+        (idk what i did)
+
+    if player spams forward movements on borders, they can break the grid on all sides
+
+    also having the panels set to 33 inputs each will cause problems with css scaling later but that can be fixed later
+
+    gameMovement has a lot of things in it that could be somewhere else
+        (like their own functions or whatever)
+        (like a "collision detection" function that runs before movement instead of the millions of checks inside movement)
 
 
 WHERE I LEFT OFF:
+    if player has moves stored while they touch the goal, theyll instead go through the goal
+        this probably happens because it does movement and then checks if player in ontop of goal
+            (doesnt happen to spikes which probably means i can take that code)
 
-        also having the panels set to 33 inputs each will cause problems with css scaling later but that can be fixed later
-
-        can still press action buttons while game is going
-            (needs to be fixed)
-
-        can press actions before game is started
-            (needs to be fixed)
-    
 
 CODING GAME NEEDS: (not sorted)
-
     For loop?
         (maybe i come back to the idea to introduce a for loop to cut down on actions, but need to style one first)
         (i have no idea how i even want it to look which is problem #1)

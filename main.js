@@ -31,8 +31,9 @@ let currentIndex = -1,
 	gamePlayerStart,
 	gameLives = 3,
 	gameLevel = 1,
-	gameInProgress = 0,
-	gameButtonsPressed = [];
+	gameInProgress = false,
+	gameButtonsPressed = [],
+	gameHasStarted = false;
 const aimBallButtons = ["aimOne", "aimTwo", "aimThree"],
 	aimDifficultyButtons = ["aimEasy", "aimMedium", "aimHard"],
 	colorNames = ["Blue", "Red", "Yellow", "Green", "Pink", "Purple"],
@@ -309,6 +310,7 @@ function gameStart() {
 	document.getElementById("lifeLost").style.zIndex = -50;
 	document.getElementById("gamePlayer").style.visibility = "visible";
 	document.getElementById("gameGoal").style.visibility = "visible";
+	gameHasStarted = true;
 	gameLives = 3;
 	numOfSpikes = 100;
 	for (i = 0; i < numOfSpikes; i++) {
@@ -451,12 +453,13 @@ function gamePlaceOnGrid() {
 
 function gameMovement() {
 	// codeLearningGame Proj : allows player to move using 3 buttons, before moves, checks spin of player to move accordingly
+	// does the actual movement
 	let i = gameButtonsPressed.length;
 	if (i > 0) {
-		gameInProgress++;
+		gameInProgress = true;
 	}
 
-	if (i > 0 && gameInProgress == 1) {
+	if (i > 0 && gameInProgress == true) {
 		let movementDelay = setInterval(() => {
 			i--;
 			let currentMove = gameButtonsPressed[0];
@@ -501,6 +504,7 @@ function gameMovement() {
 					gameTurning();
 					document.getElementById("gamePlayer").style.opacity = 0;
 					gameStart();
+					gameHasStarted = false;
 				}, 2400);
 			}
 
@@ -525,7 +529,6 @@ function gameMovement() {
 
 			if (i == 0 && gameGoalCollision() && !gameSpikeCollision()) {
 				clearInterval(movementDelay);
-
 				gameWonFade();
 				gameButtonsPressed = [];
 				i = 0;
@@ -533,14 +536,17 @@ function gameMovement() {
 					pressedButtons.removeChild(pressedButtons.firstChild);
 				}
 				setTimeout(() => {
-					gameInProgress = 0;
+					gameInProgress = false;
 					gameStart();
-					gameWonLevel();
+					gameWon();
 				}, 2400);
 			} else if (i == 0 && !gameGoalCollision() && gameSpikeCollision()) {
 				clearInterval(movementDelay);
 				gameButtonsPressed = [];
 				i = 0;
+				setTimeout(() => {
+					gameInProgress = false;
+				}, 2400);
 			} else if (i == 0 && !gameGoalCollision() && !gameSpikeCollision()) {
 				clearInterval(movementDelay);
 				gameButtonsPressed = [];
@@ -548,7 +554,7 @@ function gameMovement() {
 				gameLostLife();
 				gameDeathFade();
 				setTimeout(() => {
-					gameInProgress = 0;
+					gameInProgress = false;
 					document.getElementById("gamePlayer").style.gridArea =
 						gamePlayerStart.x + " / " + gamePlayerStart.y;
 					gamePlayer.x = gamePlayerStart.x;
@@ -556,9 +562,6 @@ function gameMovement() {
 					spin = spinStart;
 					gameTurning();
 					document.getElementById("gamePlayer").style.opacity = 0;
-					// if (gameLives == 0) {
-					// 	gameResetBoard();
-					// }
 				}, 2400);
 			}
 			if (gameLives == 0) {
@@ -566,23 +569,70 @@ function gameMovement() {
 					gameResetBoard();
 				}, 2400);
 			}
-		}, 750);
+		}, 500);
 	}
 }
 
-function gameResetBoard() {
-	document.getElementById("gameStartButton").style.visibility = "visible";
-	document.getElementById("gameStartButton").style.zIndex = 50;
-	gameLives = 3;
-	numOfSpikes = 100;
-	for (i = 0; i < numOfSpikes; i++) {
-		let spikeToRemove = document.getElementById("gameSpike" + i);
-		if (spikeToRemove != undefined) {
-			spikeToRemove.remove();
+function gameButtonActions(clicked_id) {
+	// controls buttons pressed to add actions to game
+	console.log("has started: " + gameHasStarted);
+	console.log("in progress: " + gameInProgress);
+	let buttonTemp;
+	if (
+		gameButtonsPressed.length < 33 &&
+		gameInProgress == false &&
+		gameHasStarted == true
+	) {
+		if (clicked_id == "gameTurnLeft") {
+			buttonTemp = document.createElement("div");
+			buttonTemp.classList.add("gameButtonsInPanel");
+			buttonTemp.innerHTML = "turn left";
+			document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
+			gameButtonsPressed.push(clicked_id);
+		}
+		if (clicked_id == "gameMoveForward") {
+			buttonTemp = document.createElement("div");
+			buttonTemp.classList.add("gameButtonsInPanel");
+			buttonTemp.innerHTML = "forward";
+			document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
+			gameButtonsPressed.push(clicked_id);
+		}
+		if (clicked_id == "gameTurnRight") {
+			buttonTemp = document.createElement("div");
+			buttonTemp.classList.add("gameButtonsInPanel");
+			buttonTemp.innerHTML = "turn right";
+			document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
+			gameButtonsPressed.push(clicked_id);
 		}
 	}
-	document.getElementById("gamePlayer").style.visibility = "hidden";
-	document.getElementById("gameGoal").style.visibility = "hidden";
+	if (
+		gameButtonsPressed.length >= 33 &&
+		gameButtonsPressed.length < 66 &&
+		gameInProgress == false &&
+		gameHasStarted == true
+	) {
+		if (clicked_id == "gameTurnLeft") {
+			buttonTemp = document.createElement("div");
+			buttonTemp.classList.add("gameButtonsInPanel");
+			buttonTemp.innerHTML = "turn left";
+			document.getElementById("pressedRightPanel").appendChild(buttonTemp);
+			gameButtonsPressed.push(clicked_id);
+		}
+		if (clicked_id == "gameMoveForward") {
+			buttonTemp = document.createElement("div");
+			buttonTemp.classList.add("gameButtonsInPanel");
+			buttonTemp.innerHTML = "forward";
+			document.getElementById("pressedRightPanel").appendChild(buttonTemp);
+			gameButtonsPressed.push(clicked_id);
+		}
+		if (clicked_id == "gameTurnRight") {
+			buttonTemp = document.createElement("div");
+			buttonTemp.classList.add("gameButtonsInPanel");
+			buttonTemp.innerHTML = "turn right";
+			document.getElementById("pressedRightPanel").appendChild(buttonTemp);
+			gameButtonsPressed.push(clicked_id);
+		}
+	}
 }
 
 function gameTurning(currentMove) {
@@ -629,6 +679,14 @@ function gameSpikeCollision() {
 	}
 }
 
+function gameGoalCollision() {
+	// codeLearningGame Proj : checks if player is on top of goal
+	touchingGoal = false;
+	if (gameGoal.x == gamePlayer.x && gamePlayer.y == gameGoal.y) {
+		return (touchingGoal = true);
+	}
+}
+
 function gameLostLife() {
 	if (gameLives == 3) {
 		document.getElementById("gameHeart3").style.opacity = 0;
@@ -642,7 +700,7 @@ function gameLostLife() {
 	}
 }
 
-function gameWonLevel() {
+function gameWon() {
 	if (gameLevel == 1) {
 		document.getElementById("gameLevel").innerHTML = "level : 2";
 		gameLevel = 2;
@@ -675,6 +733,7 @@ function gameWonFade() {
 
 			if (k == 20) {
 				clearInterval(wonFadeOut);
+				document.getElementById("gameWon").style.zIndex = -50;
 			}
 		}, 50);
 	}, 1600);
@@ -705,6 +764,7 @@ function gameDeathFade() {
 		}
 		if (j == 7) {
 			clearInterval(gamePlayerFade);
+			document.getElementById("lifeLost").style.zIndex = -50;
 		}
 	}, 350);
 
@@ -722,12 +782,19 @@ function gameDeathFade() {
 	}, 1600);
 }
 
-function gameGoalCollision() {
-	// codeLearningGame Proj : checks if player is on top of goal
-	touchingGoal = false;
-	if (gameGoal.x == gamePlayer.x && gamePlayer.y == gameGoal.y) {
-		return (touchingGoal = true);
+function gameResetBoard() {
+	document.getElementById("gameStartButton").style.visibility = "visible";
+	document.getElementById("gameStartButton").style.zIndex = 110;
+	gameLives = 3;
+	numOfSpikes = 100;
+	for (i = 0; i < numOfSpikes; i++) {
+		let spikeToRemove = document.getElementById("gameSpike" + i);
+		if (spikeToRemove != undefined) {
+			spikeToRemove.remove();
+		}
 	}
+	document.getElementById("gamePlayer").style.visibility = "hidden";
+	document.getElementById("gameGoal").style.visibility = "hidden";
 }
 
 class cellLocation {
@@ -824,62 +891,8 @@ function testIfPossible() {
 	return false;
 }
 
-function gameButtonActions(clicked_id) {
-	let buttonTemp;
-	if (gameButtonsPressed.length < 33 && gameInProgress == 0) {
-		if (clicked_id == "gameTurnLeft") {
-			buttonTemp = document.createElement("div");
-			buttonTemp.classList.add("gameButtonsInPanel");
-			buttonTemp.innerHTML = "turn left";
-			document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
-			gameButtonsPressed.push(clicked_id);
-		}
-		if (clicked_id == "gameMoveForward") {
-			buttonTemp = document.createElement("div");
-			buttonTemp.classList.add("gameButtonsInPanel");
-			buttonTemp.innerHTML = "forward";
-			document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
-			gameButtonsPressed.push(clicked_id);
-		}
-		if (clicked_id == "gameTurnRight") {
-			buttonTemp = document.createElement("div");
-			buttonTemp.classList.add("gameButtonsInPanel");
-			buttonTemp.innerHTML = "turn right";
-			document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
-			gameButtonsPressed.push(clicked_id);
-		}
-	}
-	if (
-		gameButtonsPressed.length >= 33 &&
-		gameButtonsPressed.length < 66 &&
-		gameInProgress == 0
-	) {
-		if (clicked_id == "gameTurnLeft") {
-			buttonTemp = document.createElement("div");
-			buttonTemp.classList.add("gameButtonsInPanel");
-			buttonTemp.innerHTML = "turn left";
-			document.getElementById("pressedRightPanel").appendChild(buttonTemp);
-			gameButtonsPressed.push(clicked_id);
-		}
-		if (clicked_id == "gameMoveForward") {
-			buttonTemp = document.createElement("div");
-			buttonTemp.classList.add("gameButtonsInPanel");
-			buttonTemp.innerHTML = "forward";
-			document.getElementById("pressedRightPanel").appendChild(buttonTemp);
-			gameButtonsPressed.push(clicked_id);
-		}
-		if (clicked_id == "gameTurnRight") {
-			buttonTemp = document.createElement("div");
-			buttonTemp.classList.add("gameButtonsInPanel");
-			buttonTemp.innerHTML = "turn right";
-			document.getElementById("pressedRightPanel").appendChild(buttonTemp);
-			gameButtonsPressed.push(clicked_id);
-		}
-	}
-}
-
 function gameButtonsClear(clicked_id) {
-	if (clicked_id == "gameClear" && gameInProgress == 0) {
+	if (clicked_id == "gameClear" && gameInProgress == false) {
 		if (gameButtonsPressed.length <= 33) {
 			const pressedButtons = document.getElementById("pressedLeftPanel");
 			while (pressedButtons.hasChildNodes()) {
@@ -902,7 +915,7 @@ function gameButtonsClear(clicked_id) {
 	} else if (
 		clicked_id == "gameDelete" &&
 		gameButtonsPressed.length >= 1 &&
-		gameInProgress == 0
+		gameInProgress == false
 	) {
 		if (gameButtonsPressed.length <= 33) {
 			const pressedButtons = document.getElementById("pressedLeftPanel");
