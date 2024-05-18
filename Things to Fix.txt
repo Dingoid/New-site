@@ -13,12 +13,7 @@ OVERALL THINGS TO LEARN/FIX:
 
 
 WHAT I DID TODAY:
-    movement buttons can no longer be pressed before game has started or while player is moving
-
-    reordered some JS
-    
-    player now cant press buttons while they are dying
-
+    moved js into seperate files
 
 IMMEDIATE PROBLEMS (sorted): 
     if player selects over 33 actions, movement breaks cause it doesnt remove them from right side
