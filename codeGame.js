@@ -16,7 +16,11 @@ let numOfSpikes,
 	gameLevel = 1,
 	gameInProgress = false,
 	gameButtonsPressed = [],
-	gameHasStarted = false;
+	gameHasStarted = false,
+	pressedButtons,
+	tempChild,
+	spikeCollision,
+	goalCollision;
 
 function gameStart() {
 	// codeLearningGame Proj : starts the game on button press
@@ -27,6 +31,8 @@ function gameStart() {
 	document.getElementById("gamePlayer").style.visibility = "visible";
 	document.getElementById("gameGoal").style.visibility = "visible";
 	gameHasStarted = true;
+	spikeCollision = false;
+	goalCollision = false;
 	gameLives = 3;
 	numOfSpikes = 100;
 	for (i = 0; i < numOfSpikes; i++) {
@@ -169,101 +175,50 @@ function gamePlaceOnGrid() {
 
 function gameMovement() {
 	// codeLearningGame Proj : allows player to move using 3 buttons, before moves, checks spin of player to move accordingly
-	// does the actual movement
 	let i = gameButtonsPressed.length;
 	if (i > 0) {
 		gameInProgress = true;
 	}
-
 	if (i > 0 && gameInProgress == true) {
 		let movementDelay = setInterval(() => {
 			i--;
-			let currentMove = gameButtonsPressed[0];
-			gameButtonsPressed.shift();
-			const pressedButtons = document.getElementById("pressedLeftPanel");
-			pressedButtons.removeChild(pressedButtons.firstChild);
+			gameCollision();
+			if (!gameCollision() && i >= 0) {
+				let currentMove = gameButtonsPressed[0];
+				gameButtonsPressed.shift();
+				gameDeleteChild();
 
-			if (spin == 1 && currentMove == "gameMoveForward") {
-				document.getElementById("gamePlayer").style.gridRow = gamePlayer.x - 1;
-				gamePlayer.x -= 1;
-			} else if (spin == 2 && currentMove == "gameMoveForward") {
-				document.getElementById("gamePlayer").style.gridColumn =
-					gamePlayer.y + 1;
-				gamePlayer.y += 1;
-			} else if (spin == 3 && currentMove == "gameMoveForward") {
-				document.getElementById("gamePlayer").style.gridRow = gamePlayer.x + 1;
-				gamePlayer.x += 1;
-			} else if (spin == 4 && currentMove == "gameMoveForward") {
-				document.getElementById("gamePlayer").style.gridColumn =
-					gamePlayer.y - 1;
-				gamePlayer.y -= 1;
-			}
-
-			if (currentMove == "gameTurnRight" || currentMove == "gameTurnLeft") {
-				gameTurning(currentMove);
-			}
-
-			if (gameSpikeCollision() && gameLives == 1) {
-				gameDeathFade();
-				gameButtonsPressed = [];
-				i = 0;
-				gameLostLife();
-				while (pressedButtons.lastChild) {
-					pressedButtons.removeChild(pressedButtons.firstChild);
+				if (spin == 1 && currentMove == "gameMoveForward") {
+					document.getElementById("gamePlayer").style.gridRow =
+						gamePlayer.x - 1;
+					gamePlayer.x -= 1;
+				} else if (spin == 2 && currentMove == "gameMoveForward") {
+					document.getElementById("gamePlayer").style.gridColumn =
+						gamePlayer.y + 1;
+					gamePlayer.y += 1;
+				} else if (spin == 3 && currentMove == "gameMoveForward") {
+					document.getElementById("gamePlayer").style.gridRow =
+						gamePlayer.x + 1;
+					gamePlayer.x += 1;
+				} else if (spin == 4 && currentMove == "gameMoveForward") {
+					document.getElementById("gamePlayer").style.gridColumn =
+						gamePlayer.y - 1;
+					gamePlayer.y -= 1;
 				}
-				setTimeout(() => {
-					document.getElementById("gamePlayer").style.gridArea =
-						gamePlayerStart.x + " / " + gamePlayerStart.y;
-					gamePlayer.x = gamePlayerStart.x;
-					gamePlayer.y = gamePlayerStart.y;
-					spin = spinStart;
-					gameTurning();
-					document.getElementById("gamePlayer").style.opacity = 0;
-					gameStart();
-					gameHasStarted = false;
-				}, 2400);
-			}
 
-			if (gameSpikeCollision() && gameLives >= 2) {
-				gameDeathFade();
-				gameButtonsPressed = [];
-				i = 0;
-				gameLostLife();
-				while (pressedButtons.lastChild) {
-					pressedButtons.removeChild(pressedButtons.firstChild);
+				if (currentMove == "gameTurnRight" || currentMove == "gameTurnLeft") {
+					gameTurning(currentMove);
 				}
-				setTimeout(() => {
-					document.getElementById("gamePlayer").style.gridArea =
-						gamePlayerStart.x + " / " + gamePlayerStart.y;
-					gamePlayer.x = gamePlayerStart.x;
-					gamePlayer.y = gamePlayerStart.y;
-					spin = spinStart;
-					gameTurning();
-					document.getElementById("gamePlayer").style.opacity = 0;
-				}, 2400);
 			}
-
-			if (i == 0 && gameGoalCollision() && !gameSpikeCollision()) {
-				clearInterval(movementDelay);
-				gameWonFade();
-				gameButtonsPressed = [];
-				i = 0;
-				while (pressedButtons.lastChild) {
-					pressedButtons.removeChild(pressedButtons.firstChild);
-				}
-				setTimeout(() => {
-					gameInProgress = false;
-					gameStart();
-					gameWon();
-				}, 2400);
-			} else if (i == 0 && !gameGoalCollision() && gameSpikeCollision()) {
+			if (gameCollision() && (i > 0 || i <= 0)) {
+				gameDeleteChild(spikeCollision, goalCollision);
 				clearInterval(movementDelay);
 				gameButtonsPressed = [];
 				i = 0;
 				setTimeout(() => {
 					gameInProgress = false;
 				}, 2400);
-			} else if (i == 0 && !gameGoalCollision() && !gameSpikeCollision()) {
+			} else if (!gameCollision() && i <= 0) {
 				clearInterval(movementDelay);
 				gameButtonsPressed = [];
 				i = 0;
@@ -271,31 +226,96 @@ function gameMovement() {
 				gameDeathFade();
 				setTimeout(() => {
 					gameInProgress = false;
-					document.getElementById("gamePlayer").style.gridArea =
-						gamePlayerStart.x + " / " + gamePlayerStart.y;
-					gamePlayer.x = gamePlayerStart.x;
-					gamePlayer.y = gamePlayerStart.y;
-					spin = spinStart;
-					gameTurning();
-					document.getElementById("gamePlayer").style.opacity = 0;
-				}, 2400);
-			}
-			if (gameLives == 0) {
-				setTimeout(() => {
-					gameResetBoard();
+					if (gameLives == 0) {
+						document.getElementById("gamePlayer").style.opacity = 0;
+						gameResetBoard();
+						gameHasStarted = false;
+					}
+					if (gameLives >= 1) {
+						document.getElementById("gamePlayer").style.gridArea =
+							gamePlayerStart.x + " / " + gamePlayerStart.y;
+						gamePlayer.x = gamePlayerStart.x;
+						gamePlayer.y = gamePlayerStart.y;
+						spin = spinStart;
+						gameTurning();
+					}
 				}, 2400);
 			}
 		}, 500);
 	}
 }
 
+function gameCollision() {
+	if (gameSpikeCollision()) {
+		spikeCollision = true;
+		gameButtonsPressed = [];
+		i = 0;
+		gameLostLife();
+		gameDeathFade();
+		if (gameLives == 0) {
+			setTimeout(() => {
+				document.getElementById("gamePlayer").style.opacity = 0;
+				gameResetBoard();
+				gameHasStarted = false;
+			}, 2400);
+		} else if (gameLives >= 1) {
+			setTimeout(() => {
+				document.getElementById("gamePlayer").style.gridArea =
+					gamePlayerStart.x + " / " + gamePlayerStart.y;
+				gamePlayer.x = gamePlayerStart.x;
+				gamePlayer.y = gamePlayerStart.y;
+				spin = spinStart;
+				gameTurning();
+				document.getElementById("gamePlayer").style.opacity = 0;
+			}, 2400);
+		}
+		return true;
+	} else if (gameGoalCollision()) {
+		goalCollision = true;
+		gameWonFade();
+		setTimeout(() => {
+			gameWon();
+			gameStart();
+		}, 2400);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function gameDeleteChild(spikeCollision, goalCollision) {
+	if (spikeCollision == true || goalCollision == true) {
+		console.log("spike or goal collision");
+		pressedButtons = document.getElementById("pressedRightPanel");
+		if (pressedButtons.hasChildNodes()) {
+			while (pressedButtons.firstChild) {
+				pressedButtons.removeChild(pressedButtons.lastChild);
+			}
+		}
+		pressedButtons = document.getElementById("pressedLeftPanel");
+		if (pressedButtons.hasChildNodes()) {
+			while (pressedButtons.firstChild) {
+				pressedButtons.removeChild(pressedButtons.lastChild);
+			}
+		}
+	} else {
+		pressedButtons = document.getElementById("pressedLeftPanel");
+		pressedButtons.removeChild(pressedButtons.firstChild);
+		if (gameButtonsPressed.length >= 33 && gameButtonsPressed.length < 66) {
+			pressedButtons = document.getElementById("pressedRightPanel");
+			tempChild = pressedButtons.firstChild;
+			pressedButtons.removeChild(pressedButtons.firstChild);
+			pressedButtons = document.getElementById("pressedLeftPanel");
+			pressedButtons.appendChild(tempChild);
+		}
+	}
+}
+
 function gameButtonActions(clicked_id) {
 	// controls buttons pressed to add actions to game
-	console.log("has started: " + gameHasStarted);
-	console.log("in progress: " + gameInProgress);
 	let buttonTemp;
 	if (
-		gameButtonsPressed.length < 33 &&
+		gameButtonsPressed.length <= 32 &&
 		gameInProgress == false &&
 		gameHasStarted == true
 	) {
@@ -320,8 +340,7 @@ function gameButtonActions(clicked_id) {
 			document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
 			gameButtonsPressed.push(clicked_id);
 		}
-	}
-	if (
+	} else if (
 		gameButtonsPressed.length >= 33 &&
 		gameButtonsPressed.length < 66 &&
 		gameInProgress == false &&
@@ -387,7 +406,7 @@ function gameTurning(currentMove) {
 
 function gameSpikeCollision() {
 	// codeLearningGame Proj : checks is player is going to touch spike, if they are, wont let them move (will be changed to lose life and restart)
-	touchingSpike = false;
+	// touchingSpike = false;
 	for (i = 0; i < spike.length; i++) {
 		if (spike[i].x == gamePlayer.x && gamePlayer.y == spike[i].y) {
 			return (touchingSpike = true);
@@ -499,6 +518,8 @@ function gameDeathFade() {
 }
 
 function gameResetBoard() {
+	spikeCollision = false;
+	goalCollision = false;
 	document.getElementById("gameStartButton").style.visibility = "visible";
 	document.getElementById("gameStartButton").style.zIndex = 110;
 	gameLives = 3;

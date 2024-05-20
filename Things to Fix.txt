@@ -13,27 +13,31 @@ OVERALL THINGS TO LEARN/FIX:
 
 
 WHAT I DID TODAY:
-    moved js into seperate files
+    goal detection works again
+
+    move all collision functions into their own function
+
+    clear visual queue works again
+
 
 IMMEDIATE PROBLEMS (sorted): 
-    if player selects over 33 actions, movement breaks cause it doesnt remove them from right side
-
-    goal detection is fucked
-        (idk what i did)
-
     if player spams forward movements on borders, they can break the grid on all sides
+
+    if player spams go, they break the game
 
     also having the panels set to 33 inputs each will cause problems with css scaling later but that can be fixed later
 
-    gameMovement has a lot of things in it that could be somewhere else
-        (like their own functions or whatever)
-        (like a "collision detection" function that runs before movement instead of the millions of checks inside movement)
+    could probably rewrite lostLife and gameWon
+
+    also i think gameInProgress and gameHasStarted are redundant in some ways
+
+    game refills lives on level won
+        (want 3 lives for whole game)
 
 
 WHERE I LEFT OFF:
-    if player has moves stored while they touch the goal, theyll instead go through the goal
-        this probably happens because it does movement and then checks if player in ontop of goal
-            (doesnt happen to spikes which probably means i can take that code)
+    (lines 176 - 312)
+        fix redundancies     
 
 
 CODING GAME NEEDS: (not sorted)
