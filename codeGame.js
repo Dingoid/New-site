@@ -14,7 +14,6 @@ let numOfSpikes,
 	gamePlayerStart,
 	gameLives = 3,
 	gameLevel = 1,
-	gameInProgress = false,
 	gameButtonsPressed = [],
 	gameHasStarted = false,
 	pressedButtons,
@@ -28,7 +27,6 @@ function gameStart() {
 	document.getElementById("gameStartButton").style.zIndex = -10;
 	document.getElementById("gameWon").style.zIndex = -50;
 	document.getElementById("lifeLost").style.zIndex = -50;
-	document.getElementById("gamePlayer").style.visibility = "visible";
 	document.getElementById("gamePlayer").style.opacity = 1;
 	document.getElementById("gameGoal").style.visibility = "visible";
 	gameHasStarted = true;
@@ -165,10 +163,8 @@ function gameMovement() {
 	//allows player to move using 3 buttons, before moves, checks spin of player to move accordingly
 	let i = gameButtonsPressed.length;
 	if (i > 0) {
-		gameInProgress = true;
-	}
-	if (i > 0 && gameInProgress == true) {
-		document.getElementById("gameGo").disabled = true;
+		let inProgress = true;
+		gameInProgress(inProgress);
 		let movementDelay = setInterval(() => {
 			i--;
 			gameCollision();
@@ -208,8 +204,8 @@ function gameMovement() {
 				gameButtonsPressed = [];
 				i = 0;
 				setTimeout(() => {
-					gameInProgress = false;
-					document.getElementById("gameGo").disabled = false;
+					inProgress = false;
+					gameInProgress(inProgress);
 				}, 2400);
 			} else if (!gameCollision() && i <= 0) {
 				clearInterval(movementDelay);
@@ -218,11 +214,29 @@ function gameMovement() {
 				gameDeathFade();
 				setTimeout(() => {
 					gameLostLife();
-					gameInProgress = false;
-					document.getElementById("gameGo").disabled = false;
+					inProgress = false;
+					gameInProgress(inProgress);
 				}, 2400);
 			}
 		}, 500);
+	}
+}
+
+function gameInProgress(inProgress) {
+	if (inProgress == false) {
+		document.getElementById("gameMoveForward").disabled = false;
+		document.getElementById("gameTurnLeft").disabled = false;
+		document.getElementById("gameTurnRight").disabled = false;
+		document.getElementById("gameClear").disabled = false;
+		document.getElementById("gameDelete").disabled = false;
+		document.getElementById("gameGo").disabled = false;
+	} else {
+		document.getElementById("gameMoveForward").disabled = true;
+		document.getElementById("gameTurnLeft").disabled = true;
+		document.getElementById("gameTurnRight").disabled = true;
+		document.getElementById("gameClear").disabled = true;
+		document.getElementById("gameDelete").disabled = true;
+		document.getElementById("gameGo").disabled = true;
 	}
 }
 
@@ -279,61 +293,55 @@ function gameDeleteChild(spikeCollision, goalCollision) {
 
 function gameButtonActions(clicked_id) {
 	//controls buttons pressed to add actions to game
-	let buttonTemp;
-	if (
-		gameButtonsPressed.length < 33 &&
-		gameInProgress == false &&
-		gameHasStarted == true
-	) {
-		if (clicked_id == "gameTurnLeft") {
-			buttonTemp = document.createElement("div");
-			buttonTemp.classList.add("gameButtonsInPanel");
-			buttonTemp.innerHTML = "turn left";
-			document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
-			gameButtonsPressed.push(clicked_id);
-		}
-		if (clicked_id == "gameMoveForward") {
-			buttonTemp = document.createElement("div");
-			buttonTemp.classList.add("gameButtonsInPanel");
-			buttonTemp.innerHTML = "forward";
-			document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
-			gameButtonsPressed.push(clicked_id);
-		}
-		if (clicked_id == "gameTurnRight") {
-			buttonTemp = document.createElement("div");
-			buttonTemp.classList.add("gameButtonsInPanel");
-			buttonTemp.innerHTML = "turn right";
-			document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
-			gameButtonsPressed.push(clicked_id);
-		}
-	} else if (
-		gameButtonsPressed.length >= 33 &&
-		gameButtonsPressed.length < 66 &&
-		gameInProgress == false &&
-		gameHasStarted == true
-	) {
-		if (clicked_id == "gameTurnLeft") {
-			buttonTemp = document.createElement("div");
-			buttonTemp.classList.add("gameButtonsInPanel");
-			buttonTemp.innerHTML = "turn left";
-			document.getElementById("pressedRightPanel").appendChild(buttonTemp);
-			gameButtonsPressed.push(clicked_id);
-		}
-		if (clicked_id == "gameMoveForward") {
-			buttonTemp = document.createElement("div");
-			buttonTemp.classList.add("gameButtonsInPanel");
-			buttonTemp.innerHTML = "forward";
-			document.getElementById("pressedRightPanel").appendChild(buttonTemp);
-			gameButtonsPressed.push(clicked_id);
-		}
-		if (clicked_id == "gameTurnRight") {
-			buttonTemp = document.createElement("div");
-			buttonTemp.classList.add("gameButtonsInPanel");
-			buttonTemp.innerHTML = "turn right";
-			document.getElementById("pressedRightPanel").appendChild(buttonTemp);
-			gameButtonsPressed.push(clicked_id);
+	let clickedID = clicked_id;
+	let whichPanel;
+	if (gameHasStarted == true) {
+		if (gameButtonsPressed.length < 33) {
+			whichPanel = "left";
+			addButtonToScreen(clickedID, whichPanel);
+		} else if (
+			gameButtonsPressed.length >= 33 &&
+			gameButtonsPressed.length < 66
+		) {
+			whichPanel = "right";
+			addButtonToScreen(clickedID, whichPanel);
 		}
 	}
+}
+
+function addButtonToScreen(clickedID, whichPanel) {
+	let buttonTemp;
+	if (clickedID == "gameTurnLeft") {
+		buttonTemp = document.createElement("div");
+		buttonTemp.classList.add("gameButtonsInPanel");
+		buttonTemp.innerHTML = "turn left";
+		if (whichPanel == "left") {
+			document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
+		} else if (whichPanel == "right") {
+			document.getElementById("pressedRightPanel").appendChild(buttonTemp);
+		}
+	}
+	if (clickedID == "gameMoveForward") {
+		buttonTemp = document.createElement("div");
+		buttonTemp.classList.add("gameButtonsInPanel");
+		buttonTemp.innerHTML = "forward";
+		if (whichPanel == "left") {
+			document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
+		} else if (whichPanel == "right") {
+			document.getElementById("pressedRightPanel").appendChild(buttonTemp);
+		}
+	}
+	if (clickedID == "gameTurnRight") {
+		buttonTemp = document.createElement("div");
+		buttonTemp.classList.add("gameButtonsInPanel");
+		buttonTemp.innerHTML = "turn right";
+		if (whichPanel == "left") {
+			document.getElementById("pressedLeftPanel").appendChild(buttonTemp);
+		} else if (whichPanel == "right") {
+			document.getElementById("pressedRightPanel").appendChild(buttonTemp);
+		}
+	}
+	gameButtonsPressed.push(clickedID);
 }
 
 function gameTurning(currentMove) {
@@ -390,7 +398,6 @@ function gameLostLife() {
 		gamePlayer.y = gamePlayerStart.y;
 		spin = spinStart;
 		gameTurning();
-		console.log("reset player");
 	} else if (gameLives == 2) {
 		document.getElementById("gameHeart2").style.opacity = 0;
 		gameLives = 1;
@@ -400,7 +407,6 @@ function gameLostLife() {
 		gamePlayer.y = gamePlayerStart.y;
 		spin = spinStart;
 		gameTurning();
-		console.log("reset player");
 	} else if (gameLives == 1) {
 		gameLives = 3;
 		document.getElementById("gamePlayer").style.opacity = 0;
@@ -409,10 +415,7 @@ function gameLostLife() {
 		document.getElementById("gameHeart1").style.opacity = 1;
 		document.getElementById("gameHeart2").style.opacity = 1;
 		document.getElementById("gameHeart3").style.opacity = 1;
-		console.log("reset game");
 	}
-	console.log("lost life");
-	console.log(gameLives);
 }
 
 function gameWon() {
@@ -527,7 +530,7 @@ function gameResetBoard() {
 			spikeToRemove.remove();
 		}
 	}
-	document.getElementById("gamePlayer").style.visibility = "hidden";
+	document.getElementById("gamePlayer").style.opacity = 0;
 	document.getElementById("gameGoal").style.visibility = "hidden";
 }
 
@@ -618,7 +621,7 @@ function testIfPossible() {
 
 function gameButtonsClear(clicked_id) {
 	//controls the clear and delete buttons, removes from queue and visually from screen
-	if (clicked_id == "gameClear" && gameInProgress == false) {
+	if (clicked_id == "gameClear") {
 		if (gameButtonsPressed.length < 33) {
 			const pressedButtons = document.getElementById("pressedLeftPanel");
 			while (pressedButtons.hasChildNodes()) {
@@ -638,11 +641,7 @@ function gameButtonsClear(clicked_id) {
 				gameButtonsPressed.pop();
 			}
 		}
-	} else if (
-		clicked_id == "gameDelete" &&
-		gameButtonsPressed.length >= 1 &&
-		gameInProgress == false
-	) {
+	} else if (clicked_id == "gameDelete" && gameButtonsPressed.length >= 1) {
 		if (gameButtonsPressed.length <= 33) {
 			const pressedButtons = document.getElementById("pressedLeftPanel");
 			pressedButtons.removeChild(pressedButtons.lastChild);
