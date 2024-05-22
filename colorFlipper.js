@@ -11,7 +11,7 @@ const colorNames = ["Blue", "Red", "Yellow", "Green", "Pink", "Purple"],
 let currentIndex;
 
 function colorChange() {
-	// colorChange Proj : all of the ColorChange Proj in 1 function
+	//all of the ColorChange Proj in 1 function
 	let randIndex = Math.floor(Math.random() * colorNames.length);
 	if (currentIndex != randIndex) {
 		let colorName = colorNames[randIndex];

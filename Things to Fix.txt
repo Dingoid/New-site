@@ -12,32 +12,27 @@ OVERALL THINGS TO LEARN/FIX:
     put contact info and stuff on either top or bottom of projects
 
 
-WHAT I DID TODAY:
-    goal detection works again
+WHAT I DID TODAY:  
+    player can no longer break game by spamming go
 
-    move all collision functions into their own function
+    fixed bug where player stayed invisible after death
 
-    clear visual queue works again
+    finishing level no longer restores lives
+
+    rewrote lostLife and gameWon
+    
+    if player spams forward movements on borders, they can break the grid on all sides
+
+    gameLives if fully fixed
+
+    cleaned comments for all js
 
 
 IMMEDIATE PROBLEMS (sorted): 
-    if player spams forward movements on borders, they can break the grid on all sides
-
-    if player spams go, they break the game
-
-    also having the panels set to 33 inputs each will cause problems with css scaling later but that can be fixed later
-
-    could probably rewrite lostLife and gameWon
-
-    also i think gameInProgress and gameHasStarted are redundant in some ways
-
-    game refills lives on level won
-        (want 3 lives for whole game)
+    also having the panels set to 30 inputs each will cause problems with css scaling later but that can be fixed later
 
 
 WHERE I LEFT OFF:
-    (lines 176 - 312)
-        fix redundancies     
 
 
 CODING GAME NEEDS: (not sorted)

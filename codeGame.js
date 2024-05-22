@@ -23,17 +23,17 @@ let numOfSpikes,
 	goalCollision;
 
 function gameStart() {
-	// codeLearningGame Proj : starts the game on button press
+	//starts the game on button press
 	document.getElementById("gameStartButton").style.visibility = "hidden";
 	document.getElementById("gameStartButton").style.zIndex = -10;
 	document.getElementById("gameWon").style.zIndex = -50;
 	document.getElementById("lifeLost").style.zIndex = -50;
 	document.getElementById("gamePlayer").style.visibility = "visible";
+	document.getElementById("gamePlayer").style.opacity = 1;
 	document.getElementById("gameGoal").style.visibility = "visible";
 	gameHasStarted = true;
 	spikeCollision = false;
 	goalCollision = false;
-	gameLives = 3;
 	numOfSpikes = 100;
 	for (i = 0; i < numOfSpikes; i++) {
 		let spikeToRemove = document.getElementById("gameSpike" + i);
@@ -41,8 +41,6 @@ function gameStart() {
 			spikeToRemove.remove();
 		}
 	}
-	console.log("\n");
-	console.log("-----NEW GAME-----");
 	gameSpawnEntities();
 	testIfPossible();
 	if (testIfPossible(true)) {
@@ -54,17 +52,14 @@ function gameStart() {
 }
 
 function gameSpawnEntities() {
-	// codeLearningGame Proj : uses other functions to spawn all the entities (spikes, player, goal)
+	//uses other functions to spawn all the entities (spikes, player, goal)
 	gameRandomSpikeSpawn();
 	gameRandomGoalSpawn();
 	gameRandomPlayerSpawn();
-	document.getElementById("gameHeart3").style.opacity = 1;
-	document.getElementById("gameHeart2").style.opacity = 1;
-	document.getElementById("gameHeart1").style.opacity = 1;
 }
 
 function gameRandomGoalSpawn() {
-	// codeLearningGame Proj : moves the goal to a random spot in the bottom right of the grid
+	//spawns the goal to a random spot in the bottom right of the grid
 	let min = 11;
 	let max = 14;
 	let x = Math.floor(min + Math.random() * (max - min + 1));
@@ -73,7 +68,7 @@ function gameRandomGoalSpawn() {
 }
 
 function gameRandomPlayerSpawn() {
-	// codeLearningGame Proj : moves the player to a random spot in the top left of the grid
+	//spawns the player to a random spot in the top left of the grid
 	let min = 2;
 	let max = 5;
 	let minSpin = 1;
@@ -87,7 +82,7 @@ function gameRandomPlayerSpawn() {
 }
 
 function gameRandomSpikeSpawn() {
-	// codeLearningGame Proj : spawns spike in random grid space, logs all the coords, then if a spike spawns on top of another spike, deletes later spike
+	//spawns spike in random grid space, logs all the coords, then if a spike spawns on top of another spike, deletes later spike
 	spike = [];
 	for (i = 0; i < numOfSpikes; i++) {
 		let min = 1;
@@ -125,7 +120,7 @@ function gameRandomSpikeSpawn() {
 }
 
 function gameSpawnedOnSpike() {
-	// codeLearningGame Proj : checks if player or goal spawns on top of spike, if it does, deletes it
+	//checks if player or goal spawns on top of spike, if it does, deletes it
 	for (i = 0; i < spike.length; i++) {
 		if (spike[i].x == gameGoal.x && spike[i].y == gameGoal.y) {
 			let spikeToRemove = document.getElementById("gameSpike" + spike[i].id);
@@ -147,17 +142,10 @@ function gameSpawnedOnSpike() {
 }
 
 function gamePlaceOnGrid() {
+	//visually places player, goal, and spikes on the grid
 	document.getElementById("gamePlayer").style.gridArea =
 		gamePlayer.x + "/" + gamePlayer.y;
-	if (spin == 2) {
-		document.getElementById("gamePlayer").style.rotate = 90 + "deg";
-	} else if (spin == 3) {
-		document.getElementById("gamePlayer").style.rotate = 180 + "deg";
-	} else if (spin == 4) {
-		document.getElementById("gamePlayer").style.rotate = 270 + "deg";
-	} else {
-		document.getElementById("gamePlayer").style.rotate = 0 + "deg";
-	}
+	gameTurning();
 
 	document.getElementById("gameGoal").style.gridArea =
 		gameGoal.x + "/" + gameGoal.y;
@@ -174,12 +162,13 @@ function gamePlaceOnGrid() {
 }
 
 function gameMovement() {
-	// codeLearningGame Proj : allows player to move using 3 buttons, before moves, checks spin of player to move accordingly
+	//allows player to move using 3 buttons, before moves, checks spin of player to move accordingly
 	let i = gameButtonsPressed.length;
 	if (i > 0) {
 		gameInProgress = true;
 	}
 	if (i > 0 && gameInProgress == true) {
+		document.getElementById("gameGo").disabled = true;
 		let movementDelay = setInterval(() => {
 			i--;
 			gameCollision();
@@ -188,25 +177,28 @@ function gameMovement() {
 				gameButtonsPressed.shift();
 				gameDeleteChild();
 
-				if (spin == 1 && currentMove == "gameMoveForward") {
-					document.getElementById("gamePlayer").style.gridRow =
-						gamePlayer.x - 1;
-					gamePlayer.x -= 1;
-				} else if (spin == 2 && currentMove == "gameMoveForward") {
-					document.getElementById("gamePlayer").style.gridColumn =
-						gamePlayer.y + 1;
-					gamePlayer.y += 1;
-				} else if (spin == 3 && currentMove == "gameMoveForward") {
-					document.getElementById("gamePlayer").style.gridRow =
-						gamePlayer.x + 1;
-					gamePlayer.x += 1;
-				} else if (spin == 4 && currentMove == "gameMoveForward") {
-					document.getElementById("gamePlayer").style.gridColumn =
-						gamePlayer.y - 1;
-					gamePlayer.y -= 1;
-				}
-
-				if (currentMove == "gameTurnRight" || currentMove == "gameTurnLeft") {
+				if (currentMove == "gameMoveForward") {
+					if (spin == 1 && gamePlayer.x > 1) {
+						document.getElementById("gamePlayer").style.gridRow =
+							gamePlayer.x - 1;
+						gamePlayer.x -= 1;
+					} else if (spin == 2 && gamePlayer.y < 15) {
+						document.getElementById("gamePlayer").style.gridColumn =
+							gamePlayer.y + 1;
+						gamePlayer.y += 1;
+					} else if (spin == 3 && gamePlayer.x < 15) {
+						document.getElementById("gamePlayer").style.gridRow =
+							gamePlayer.x + 1;
+						gamePlayer.x += 1;
+					} else if (spin == 4 && gamePlayer.y > 1) {
+						document.getElementById("gamePlayer").style.gridColumn =
+							gamePlayer.y - 1;
+						gamePlayer.y -= 1;
+					}
+				} else if (
+					currentMove == "gameTurnRight" ||
+					currentMove == "gameTurnLeft"
+				) {
 					gameTurning(currentMove);
 				}
 			}
@@ -217,28 +209,17 @@ function gameMovement() {
 				i = 0;
 				setTimeout(() => {
 					gameInProgress = false;
+					document.getElementById("gameGo").disabled = false;
 				}, 2400);
 			} else if (!gameCollision() && i <= 0) {
 				clearInterval(movementDelay);
 				gameButtonsPressed = [];
 				i = 0;
-				gameLostLife();
 				gameDeathFade();
 				setTimeout(() => {
+					gameLostLife();
 					gameInProgress = false;
-					if (gameLives == 0) {
-						document.getElementById("gamePlayer").style.opacity = 0;
-						gameResetBoard();
-						gameHasStarted = false;
-					}
-					if (gameLives >= 1) {
-						document.getElementById("gamePlayer").style.gridArea =
-							gamePlayerStart.x + " / " + gamePlayerStart.y;
-						gamePlayer.x = gamePlayerStart.x;
-						gamePlayer.y = gamePlayerStart.y;
-						spin = spinStart;
-						gameTurning();
-					}
+					document.getElementById("gameGo").disabled = false;
 				}, 2400);
 			}
 		}, 500);
@@ -246,36 +227,21 @@ function gameMovement() {
 }
 
 function gameCollision() {
+	//runs collision of spikes and goal and changes lives and levels accordingly
 	if (gameSpikeCollision()) {
 		spikeCollision = true;
 		gameButtonsPressed = [];
 		i = 0;
-		gameLostLife();
 		gameDeathFade();
-		if (gameLives == 0) {
-			setTimeout(() => {
-				document.getElementById("gamePlayer").style.opacity = 0;
-				gameResetBoard();
-				gameHasStarted = false;
-			}, 2400);
-		} else if (gameLives >= 1) {
-			setTimeout(() => {
-				document.getElementById("gamePlayer").style.gridArea =
-					gamePlayerStart.x + " / " + gamePlayerStart.y;
-				gamePlayer.x = gamePlayerStart.x;
-				gamePlayer.y = gamePlayerStart.y;
-				spin = spinStart;
-				gameTurning();
-				document.getElementById("gamePlayer").style.opacity = 0;
-			}, 2400);
-		}
+		setTimeout(() => {
+			gameLostLife();
+		}, 2400);
 		return true;
-	} else if (gameGoalCollision()) {
+	} else if (gameGoal.x == gamePlayer.x && gamePlayer.y == gameGoal.y) {
 		goalCollision = true;
 		gameWonFade();
 		setTimeout(() => {
 			gameWon();
-			gameStart();
 		}, 2400);
 		return true;
 	} else {
@@ -284,8 +250,8 @@ function gameCollision() {
 }
 
 function gameDeleteChild(spikeCollision, goalCollision) {
+	//visually deletes things from queue
 	if (spikeCollision == true || goalCollision == true) {
-		console.log("spike or goal collision");
 		pressedButtons = document.getElementById("pressedRightPanel");
 		if (pressedButtons.hasChildNodes()) {
 			while (pressedButtons.firstChild) {
@@ -301,7 +267,7 @@ function gameDeleteChild(spikeCollision, goalCollision) {
 	} else {
 		pressedButtons = document.getElementById("pressedLeftPanel");
 		pressedButtons.removeChild(pressedButtons.firstChild);
-		if (gameButtonsPressed.length >= 33 && gameButtonsPressed.length < 66) {
+		if (gameButtonsPressed.length > 30 && gameButtonsPressed.length < 62) {
 			pressedButtons = document.getElementById("pressedRightPanel");
 			tempChild = pressedButtons.firstChild;
 			pressedButtons.removeChild(pressedButtons.firstChild);
@@ -312,10 +278,10 @@ function gameDeleteChild(spikeCollision, goalCollision) {
 }
 
 function gameButtonActions(clicked_id) {
-	// controls buttons pressed to add actions to game
+	//controls buttons pressed to add actions to game
 	let buttonTemp;
 	if (
-		gameButtonsPressed.length <= 32 &&
+		gameButtonsPressed.length < 31 &&
 		gameInProgress == false &&
 		gameHasStarted == true
 	) {
@@ -341,8 +307,8 @@ function gameButtonActions(clicked_id) {
 			gameButtonsPressed.push(clicked_id);
 		}
 	} else if (
-		gameButtonsPressed.length >= 33 &&
-		gameButtonsPressed.length < 66 &&
+		gameButtonsPressed.length >= 31 &&
+		gameButtonsPressed.length < 62 &&
 		gameInProgress == false &&
 		gameHasStarted == true
 	) {
@@ -371,7 +337,7 @@ function gameButtonActions(clicked_id) {
 }
 
 function gameTurning(currentMove) {
-	// codeLearningGame Proj : sets player rotation based on spin that player is currently at
+	//sets player rotation based on spin that player is currently at
 	let x = 0;
 	if (spin == 1) {
 		gameSpinArray = [1, 2, 3, 4];
@@ -405,8 +371,7 @@ function gameTurning(currentMove) {
 }
 
 function gameSpikeCollision() {
-	// codeLearningGame Proj : checks is player is going to touch spike, if they are, wont let them move (will be changed to lose life and restart)
-	// touchingSpike = false;
+	//checks is player is touching any spike, if they are, returns true
 	for (i = 0; i < spike.length; i++) {
 		if (spike[i].x == gamePlayer.x && gamePlayer.y == spike[i].y) {
 			return (touchingSpike = true);
@@ -414,38 +379,67 @@ function gameSpikeCollision() {
 	}
 }
 
-function gameGoalCollision() {
-	// codeLearningGame Proj : checks if player is on top of goal
-	touchingGoal = false;
-	if (gameGoal.x == gamePlayer.x && gamePlayer.y == gameGoal.y) {
-		return (touchingGoal = true);
-	}
-}
-
 function gameLostLife() {
+	//controls the losing lives feature, if player still has lives, resets, otherwise restarts game
 	if (gameLives == 3) {
 		document.getElementById("gameHeart3").style.opacity = 0;
 		gameLives = 2;
+		document.getElementById("gamePlayer").style.gridArea =
+			gamePlayerStart.x + " / " + gamePlayerStart.y;
+		gamePlayer.x = gamePlayerStart.x;
+		gamePlayer.y = gamePlayerStart.y;
+		spin = spinStart;
+		gameTurning();
+		console.log("reset player");
 	} else if (gameLives == 2) {
 		document.getElementById("gameHeart2").style.opacity = 0;
 		gameLives = 1;
+		document.getElementById("gamePlayer").style.gridArea =
+			gamePlayerStart.x + " / " + gamePlayerStart.y;
+		gamePlayer.x = gamePlayerStart.x;
+		gamePlayer.y = gamePlayerStart.y;
+		spin = spinStart;
+		gameTurning();
+		console.log("reset player");
 	} else if (gameLives == 1) {
-		document.getElementById("gameHeart1").style.opacity = 0;
-		gameLives = 0;
+		gameLives = 3;
+		document.getElementById("gamePlayer").style.opacity = 0;
+		gameResetBoard();
+		gameHasStarted = false;
+		document.getElementById("gameHeart1").style.opacity = 1;
+		document.getElementById("gameHeart2").style.opacity = 1;
+		document.getElementById("gameHeart3").style.opacity = 1;
+		console.log("reset game");
 	}
+	console.log("lost life");
+	console.log(gameLives);
 }
 
 function gameWon() {
+	//if player beats level, moves them to the next, if player beats final, resets the whole game
 	if (gameLevel == 1) {
 		document.getElementById("gameLevel").innerHTML = "level : 2";
 		gameLevel = 2;
+		gameStart();
 	} else if (gameLevel == 2) {
 		document.getElementById("gameLevel").innerHTML = "level : 3";
 		gameLevel = 3;
+		gameStart();
+	} else if (gameLevel == 3) {
+		document.getElementById("gamePlayer").style.opacity = 0;
+		gameResetBoard();
+		gameHasStarted = false;
+		document.getElementById("gameLevel").innerHTML = "level : 1";
+		gameLevel = 1;
+		gameLives = 3;
+		document.getElementById("gameHeart1").style.opacity = 1;
+		document.getElementById("gameHeart2").style.opacity = 1;
+		document.getElementById("gameHeart3").style.opacity = 1;
 	}
 }
 
 function gameWonFade() {
+	//controls visual fade of "game won" screen
 	document.getElementById("gameWon").style.zIndex = 50;
 	let i = 0;
 	let wonOpacity = 0;
@@ -475,6 +469,7 @@ function gameWonFade() {
 }
 
 function gameDeathFade() {
+	//controls visual fade of "game death" screen
 	document.getElementById("lifeLost").style.zIndex = 50;
 	let i = 0;
 	let lifeOpacity = 0;
@@ -492,16 +487,18 @@ function gameDeathFade() {
 	let gamePlayerFade = setInterval(() => {
 		j++;
 
-		if (document.getElementById("gamePlayer").style.opacity == 1) {
-			document.getElementById("gamePlayer").style.opacity = 0;
-		} else {
+		if (document.getElementById("gamePlayer").style.opacity == 0) {
 			document.getElementById("gamePlayer").style.opacity = 1;
+		} else {
+			document.getElementById("gamePlayer").style.opacity = 0;
 		}
+
 		if (j == 7) {
 			clearInterval(gamePlayerFade);
 			document.getElementById("lifeLost").style.zIndex = -50;
 		}
-	}, 350);
+	}, 300);
+	document.getElementById("gamePlayer").style.opacity = 0;
 
 	let k = 0;
 	setTimeout(() => {
@@ -518,11 +515,11 @@ function gameDeathFade() {
 }
 
 function gameResetBoard() {
+	//resets the board after player loses all lives or beats all levels
 	spikeCollision = false;
 	goalCollision = false;
 	document.getElementById("gameStartButton").style.visibility = "visible";
 	document.getElementById("gameStartButton").style.zIndex = 110;
-	gameLives = 3;
 	numOfSpikes = 100;
 	for (i = 0; i < numOfSpikes; i++) {
 		let spikeToRemove = document.getElementById("gameSpike" + i);
@@ -544,16 +541,16 @@ class cellLocation {
 }
 
 function testIfPossible() {
-	// codeLearningGame Proj : creates a map based on player, goal, and spike spawns, then moves through each available cell to check if the game is actually possible
+	//creates a map based on player, goal, and spike spawns, then moves through each available cell to check if the game is actually possible
 	let X = 15;
 	let Y = 15;
 	let map = Array.from(Array(X), () => Array(Y).fill(" "));
-	// map is an array the length of X, that is then filled with arrays, the length of Y, that are filled with empty spaces
-	// if .fill wasn't used, the Y arrays inside the X array, would have "empty" spaces, which can be filled but its easier to do when initializing
+	//map is an array the length of X, that is then filled with arrays, the length of Y, that are filled with empty spaces
+	//if .fill wasn't used, the Y arrays inside the X array, would have "empty" spaces
 	let marked = Array.from(Array(X), () => Array(Y).fill(" "));
 
 	for (i = 0; i < map.length; i++) {
-		// generates map the size of the gameArea, fills it with player, goal, and spike locations
+		//fills map with player, goal, and spike locations
 		let found = spike.filter(({ x }) => x == i + 1);
 		for (j = 0; j < found.length; j++) {
 			let y = found[j].y - 1;
@@ -594,33 +591,24 @@ function testIfPossible() {
 		let current = queue[0]; // set current to first thing in queue
 		queue.shift(); // removes first thing in queue
 
-		//end
 		if (map[current.x][current.y] == "G") {
 			// if current matches with goal in the "map" sets minDistance to the current.d (which is current distance from start)
 			return true;
 		}
 
-		//up
 		if (current.x - 1 >= 0 && marked[current.x - 1][current.y] == false) {
-			// if above current isn't 0 and the location hasn't been marked, add it to queue then mark it
 			queue.push(new cellLocation(current.x - 1, current.y, current.d + 1));
 			marked[current.x - 1][current.y] = true;
 		}
-		//right
 		if (current.y + 1 < 15 && marked[current.x][current.y + 1] == false) {
-			// if to the right current isn't 0 and the location hasn't been marked, add it to queue then mark it
 			queue.push(new cellLocation(current.x, current.y + 1, current.d + 1));
 			marked[current.x][current.y + 1] = true;
 		}
-		//down
 		if (current.x + 1 < 15 && marked[current.x + 1][current.y] == false) {
-			// if below current isn't 0 and the location hasnt been marked, add it to queue then mark it
 			queue.push(new cellLocation(current.x + 1, current.y, current.d + 1));
 			marked[current.x + 1][current.y] = true;
 		}
-		//left
 		if (current.y - 1 >= 0 && marked[current.x][current.y - 1] == false) {
-			// if to the left current isnt 0 and the location hasnt been marked, add it to queue then mark it
 			queue.push(new cellLocation(current.x, current.y - 1, current.d + 1));
 			marked[current.x][current.y - 1] = true;
 		}
@@ -629,15 +617,16 @@ function testIfPossible() {
 }
 
 function gameButtonsClear(clicked_id) {
+	//controls the clear and delete buttons, removes from queue and visually from screen
 	if (clicked_id == "gameClear" && gameInProgress == false) {
-		if (gameButtonsPressed.length <= 33) {
+		if (gameButtonsPressed.length < 31) {
 			const pressedButtons = document.getElementById("pressedLeftPanel");
 			while (pressedButtons.hasChildNodes()) {
 				pressedButtons.removeChild(pressedButtons.firstChild);
 				gameButtonsPressed.pop();
 			}
 		}
-		if (34 <= gameButtonsPressed.length && gameButtonsPressed.length <= 66) {
+		if (31 <= gameButtonsPressed.length && gameButtonsPressed.length <= 62) {
 			let pressedButtons = document.getElementById("pressedRightPanel");
 			while (pressedButtons.hasChildNodes()) {
 				pressedButtons.removeChild(pressedButtons.firstChild);
@@ -654,12 +643,12 @@ function gameButtonsClear(clicked_id) {
 		gameButtonsPressed.length >= 1 &&
 		gameInProgress == false
 	) {
-		if (gameButtonsPressed.length <= 33) {
+		if (gameButtonsPressed.length <= 31) {
 			const pressedButtons = document.getElementById("pressedLeftPanel");
 			pressedButtons.removeChild(pressedButtons.lastChild);
 			gameButtonsPressed.pop();
 		}
-		if (34 <= gameButtonsPressed.length && gameButtonsPressed.length <= 66) {
+		if (31 <= gameButtonsPressed.length && gameButtonsPressed.length <= 62) {
 			const pressedButtons = document.getElementById("pressedRightPanel");
 			pressedButtons.removeChild(pressedButtons.lastChild);
 			gameButtonsPressed.pop();

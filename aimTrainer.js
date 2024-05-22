@@ -19,7 +19,7 @@ let buttonClick = 0,
 	highScore15_75 = 100;
 
 function settingsChange(clicked_id) {
-	// aimGame Proj : all of the setting changing (i.e. changing color of button selection, changing target size, and changing amount of balls you have to click)
+	//all of the setting changing (i.e. changing color of button selection, changing target size, and changing amount of balls you have to click)
 	let currentDifficultyId = "aimMedium";
 	let currentBallCountId = "aimOne";
 	if (
@@ -64,7 +64,7 @@ function settingsChange(clicked_id) {
 }
 
 function aimSettingsOpenClosed() {
-	// aimGame Proj : when you press the settings button, opens all setting or closes all settings
+	//when you press the settings button, opens all setting or closes all settings
 	if (settingsOpen != true) {
 		for (i = 0; i < aimBallButtons.length; i++) {
 			document.getElementById(aimBallButtons[i]).style.visibility = "visible";
@@ -83,7 +83,7 @@ function aimSettingsOpenClosed() {
 }
 
 function aimStart() {
-	// aimGame Proj : when you press the start button runs all of the functions that make the game work and keeps other buttons hidden while game is going, also formats the timer time using other functions
+	//when you press the start button runs all of the functions that make the game work and keeps other buttons hidden while game is going, also formats the timer time using other functions
 	if (startTime == 0) {
 		aimStartTimer();
 	}
@@ -117,7 +117,7 @@ function aimStart() {
 }
 
 function aimGameType(ballNumber, difficulty) {
-	// aimGame Proj : turns the settings buttons chosen into a string for other functions to use
+	//turns the settings buttons chosen into a string for other functions to use
 	if (ballNumber == 5) {
 		if (difficulty == 35) {
 			gameType = "5 35";
@@ -146,7 +146,7 @@ function aimGameType(ballNumber, difficulty) {
 }
 
 function aimHighScoreTimeCalc(finalTime) {
-	// aimGame Proj : formats high score times (could possible combine with aimHighScoreTime() but ill come back to it)
+	//formats high score times (could possible combine with aimHighScoreTime() but ill come back to it)
 	if (gameType === "5 75" && highScore5_75 > finalTime) {
 		highScore5_75 = finalTime.toFixed(3);
 	} else if (gameType === "5 50" && highScore5_50 > finalTime) {
@@ -169,7 +169,7 @@ function aimHighScoreTimeCalc(finalTime) {
 }
 
 function aimHighScoreTime() {
-	// aimGame Proj : uses gameType to determine if the new time is faster than previous time of same gameType
+	//uses gameType to determine if the new time is faster than previous time of same gameType
 	if (gameType === "5 75" && highScore5_75 < 99) {
 		document.getElementById("aimHighScoreTime").innerHTML =
 			highScore5_75 + " seconds";
@@ -203,17 +203,17 @@ function aimHighScoreTime() {
 }
 
 function aimStartTimer() {
-	// aimGame Proj : sets start time to right after the game is started (its called right at the beginning of game start)
+	//sets start time to right after the game is started (its called right at the beginning of game start)
 	startTime = Date.now();
 }
 
 function aimEndTimer() {
-	// aimGame Proj : sets end time to when the game ends (its called right at the end of game start)
+	//sets end time to when the game ends (its called right at the end of game start)
 	endTime = Date.now();
 }
 
 function aimButtonOrBall() {
-	// aimGame Proj : when the start button is pressed turns the button into a ball until game is over, then it turns it back and makes the timer, settings, and high score visible again
+	//when the start button is pressed turns the button into a ball until game is over, then it turns it back and makes the timer, settings, and high score visible again
 	if (buttonClick >= ballNumber + 1) {
 		document.getElementById("aimButton").innerHTML = "Try again?";
 		document.getElementById("aimButton").style.visibility = "visible";
@@ -236,7 +236,7 @@ function aimButtonOrBall() {
 }
 
 function aimRandomPoint() {
-	// aimGame Proj : moves the ball to a random x/y coordinate inside the game area
+	//moves the ball to a random x/y coordinate inside the game area
 	let min = 5;
 	let max = 90;
 	let x = Math.floor(min + Math.random() * (max - min + 1));
