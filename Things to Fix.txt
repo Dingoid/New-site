@@ -1,7 +1,4 @@
 OVERALL THINGS TO LEARN/FIX:
-
-    game scaling, maintain aspect ratio when shrunk and general css shit, scaling is kinda fucked on everything
-
     scroll buttons that get bigger based on what part of the page youre on and you can click on them to quickly scroll to that part of the page
         (the balls are there but the do literally nothing right now)
 
@@ -13,36 +10,17 @@ OVERALL THINGS TO LEARN/FIX:
 
 
 WHAT I DID TODAY:  
-    player can no longer break game by spamming go
-
-    fixed bug where player stayed invisible after death
-
-    finishing level no longer restores lives
-
-    rewrote lostLife and gameWon
     
-    if player spams forward movements on borders, they can break the grid on all sides
-
-    gameLives if fully fixed
-
-    cleaned comments for all js
-
-
-IMMEDIATE PROBLEMS (sorted): 
-    also having the panels set to 30 inputs each will cause problems with css scaling later but that can be fixed later
 
 
 WHERE I LEFT OFF:
+
 
 
 CODING GAME NEEDS: (not sorted)
     For loop?
         (maybe i come back to the idea to introduce a for loop to cut down on actions, but need to style one first)
         (i have no idea how i even want it to look which is problem #1)
-
-    Sprites
-        (probably just rip shit off google or whatever, just somethin better than boxes)
-        (maybe even change background, idk i kinda like minecraft grass)
         
     Scoring system
         (timer i think would work better than minimum actions because of the randomly generated maps)

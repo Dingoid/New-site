@@ -151,10 +151,10 @@ function gamePlaceOnGrid() {
 		gameGoal.x + "/" + gameGoal.y;
 
 	for (i = 0; i < spike.length; i++) {
-		spikeTemp = document.createElement("div");
+		spikeTemp = document.createElement("img");
 		spikeTemp.classList.add("gameSpike");
 		spikeTemp.setAttribute("id", "gameSpike" + i);
-		spikeTemp.innerHTML = "*";
+		spikeTemp.src = "/gameSprites/spikes.png";
 		document.getElementById("gameArea").appendChild(spikeTemp);
 		document.getElementById("gameSpike" + i).style.gridArea =
 			spike[i].x + "/" + spike[i].y;
@@ -267,7 +267,7 @@ function gameDeleteChild(spikeCollision, goalCollision) {
 	} else {
 		pressedButtons = document.getElementById("pressedLeftPanel");
 		pressedButtons.removeChild(pressedButtons.firstChild);
-		if (gameButtonsPressed.length > 30 && gameButtonsPressed.length < 62) {
+		if (gameButtonsPressed.length >= 33 && gameButtonsPressed.length < 66) {
 			pressedButtons = document.getElementById("pressedRightPanel");
 			tempChild = pressedButtons.firstChild;
 			pressedButtons.removeChild(pressedButtons.firstChild);
@@ -281,7 +281,7 @@ function gameButtonActions(clicked_id) {
 	//controls buttons pressed to add actions to game
 	let buttonTemp;
 	if (
-		gameButtonsPressed.length < 31 &&
+		gameButtonsPressed.length < 33 &&
 		gameInProgress == false &&
 		gameHasStarted == true
 	) {
@@ -307,8 +307,8 @@ function gameButtonActions(clicked_id) {
 			gameButtonsPressed.push(clicked_id);
 		}
 	} else if (
-		gameButtonsPressed.length >= 31 &&
-		gameButtonsPressed.length < 62 &&
+		gameButtonsPressed.length >= 33 &&
+		gameButtonsPressed.length < 66 &&
 		gameInProgress == false &&
 		gameHasStarted == true
 	) {
@@ -360,13 +360,13 @@ function gameTurning(currentMove) {
 	}
 
 	if (spin == 1) {
-		document.getElementById("gamePlayer").style.rotate = 0 + "deg";
+		document.getElementById("gamePlayer").src = "gameSprites/back.png";
 	} else if (spin == 2) {
-		document.getElementById("gamePlayer").style.rotate = 90 + "deg";
+		document.getElementById("gamePlayer").src = "gameSprites/left.png";
 	} else if (spin == 3) {
-		document.getElementById("gamePlayer").style.rotate = 180 + "deg";
+		document.getElementById("gamePlayer").src = "gameSprites/front.png";
 	} else if (spin == 4) {
-		document.getElementById("gamePlayer").style.rotate = 270 + "deg";
+		document.getElementById("gamePlayer").src = "gameSprites/right.png";
 	}
 }
 
@@ -619,14 +619,14 @@ function testIfPossible() {
 function gameButtonsClear(clicked_id) {
 	//controls the clear and delete buttons, removes from queue and visually from screen
 	if (clicked_id == "gameClear" && gameInProgress == false) {
-		if (gameButtonsPressed.length < 31) {
+		if (gameButtonsPressed.length < 33) {
 			const pressedButtons = document.getElementById("pressedLeftPanel");
 			while (pressedButtons.hasChildNodes()) {
 				pressedButtons.removeChild(pressedButtons.firstChild);
 				gameButtonsPressed.pop();
 			}
 		}
-		if (31 <= gameButtonsPressed.length && gameButtonsPressed.length <= 62) {
+		if (33 <= gameButtonsPressed.length && gameButtonsPressed.length <= 66) {
 			let pressedButtons = document.getElementById("pressedRightPanel");
 			while (pressedButtons.hasChildNodes()) {
 				pressedButtons.removeChild(pressedButtons.firstChild);
@@ -643,12 +643,12 @@ function gameButtonsClear(clicked_id) {
 		gameButtonsPressed.length >= 1 &&
 		gameInProgress == false
 	) {
-		if (gameButtonsPressed.length <= 31) {
+		if (gameButtonsPressed.length <= 33) {
 			const pressedButtons = document.getElementById("pressedLeftPanel");
 			pressedButtons.removeChild(pressedButtons.lastChild);
 			gameButtonsPressed.pop();
 		}
-		if (31 <= gameButtonsPressed.length && gameButtonsPressed.length <= 62) {
+		if (33 <= gameButtonsPressed.length && gameButtonsPressed.length <= 66) {
 			const pressedButtons = document.getElementById("pressedRightPanel");
 			pressedButtons.removeChild(pressedButtons.lastChild);
 			gameButtonsPressed.pop();

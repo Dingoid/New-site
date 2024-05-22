@@ -254,7 +254,6 @@ button:hover {
 
 .leftPanel {
 	background-color: rgb(30, 30, 30);
-	border: 1px solid green;
 	height: 100%;
 	width: 35%;
 	display: flex;
@@ -267,7 +266,6 @@ button:hover {
 	height: fit-content;
 	font-size: 1.5em;
 	text-align: center;
-	border: 1px solid purple;
 }
 
 .gameLives {
@@ -286,7 +284,6 @@ button:hover {
 }
 
 .gameLeftButtons {
-	border: 1px solid green;
 	bottom: 0;
 	margin: 5% 2%;
 	height: fit-content;
@@ -345,25 +342,23 @@ button:hover {
 }
 
 .gamePlayer {
-	background-color: pink;
-	font-size: 3em;
-	text-align: center;
+	width: 100%;
+	height: 100%;
 	z-index: 10;
 	opacity: 1;
 	visibility: hidden;
 }
 
 .gameGoal {
-	background-color: gold;
-	grid-column: 15;
-	z-index: 10;
+	height: 100%;
+	width: 100%;
+	z-index: 9;
 	visibility: hidden;
 }
 
 .gameSpike {
-	background-color: grey;
-	font-size: 5em;
-	text-align: center;
+	height: 100%;
+	width: 100%;
 	z-index: 5;
 }
 
@@ -375,11 +370,9 @@ button:hover {
 	flex-direction: column;
 	justify-content: space-around;
 	position: relative;
-	border: 1px solid green;
 }
 
 .rightTopButtons {
-	border: 1px solid red;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
@@ -388,25 +381,22 @@ button:hover {
 }
 
 .rightPressedButtonsPanel {
-	border: 1px solid red;
+	margin: 1% 0;
 	height: 100%;
 	display: flex;
 }
 
 .pressedLeftPanel {
-	border: 1px solid green;
 	width: 50%;
 	height: 100%;
 }
 
 .pressedRightPanel {
-	border: 1px solid blue;
 	width: 50%;
 	height: 100%;
 }
 
 .rightBottomButtons {
-	border: 1px solid red;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
@@ -420,7 +410,6 @@ button:hover {
 }
 
 .gameButtonsInPanel {
-	border: 1px solid yellow;
 	background-color: #808080;
 	color: white;
 	height: 1.25em;
