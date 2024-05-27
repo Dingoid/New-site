@@ -217,7 +217,7 @@ function aimButtonOrBall() {
 	if (buttonClick >= ballNumber + 1) {
 		document.getElementById("aimButton").innerHTML = "Try again?";
 		document.getElementById("aimButton").style.visibility = "visible";
-		document.getElementById("aimButton").style.width = 15 + "%";
+		document.getElementById("aimButton").style.width = 15 + "vw";
 		document.getElementById("aimButton").style.height = "fit-content";
 		document.getElementById("aimButton").style.borderRadius = 1 + "vw";
 		document.getElementById("aimButton").style.backgroundColor = "black";

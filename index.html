@@ -5,106 +5,58 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Document</title>
 		<link rel="stylesheet" href="style.css" />
+		<script src="scroll.js"></script>
 		<script src="codeGame.js"></script>
 		<script src="colorFlipper.js"></script>
 		<script src="aimTrainer.js"></script>
 	</head>
 	<body onload="colorChange(), aimSettingsOpenClosed(), settingsChange()">
 		<div class="customScroll">
-			<button class="scrollBall"></button>
-			<button class="scrollBall"></button>
-			<button class="scrollBall"></button>
-			<button class="scrollBall"></button>
+			<button
+				id="scrollBall1"
+				class="scrollBall"
+				onclick="scrollToPage(this.id)"
+			></button>
+			<button
+				id="scrollBall2"
+				class="scrollBall"
+				onclick="scrollToPage(this.id)"
+			></button>
+			<button
+				id="scrollBall3"
+				class="scrollBall"
+				onclick="scrollToPage(this.id)"
+			></button>
+			<button
+				id="scrollBall4"
+				class="scrollBall"
+				onclick="scrollToPage(this.id)"
+			></button>
 		</div>
 
 		<section>
-			<h1 class="projHeader">Javascript game</h1>
-			<div class="proj proj3">
-				<div class="leftPanel">
-					<div id="gameLevel" class="leftInfo">level : 1</div>
-					<div class="leftInfo gameLives">
-						lives :
-						<div id="gameHeart1" class="heart">❤</div>
-						<div id="gameHeart2" class="heart">❤</div>
-						<div id="gameHeart3" class="heart">❤</div>
-					</div>
-					<!-- <div class="leftInfo gameHighScore">High Score :</div> -->
+			<h1 id="colorFlipperH1" class="projHeader">Color Flipper</h1>
+			<div id="colorFlipper" class="proj colorFlipper">
+				<div class="colorTextContainer">
+					<span id="colorNameText" class="colorNameText">Color: </span>
+					<span id="colorTextColor" class="colorTextColor">"colorName"</span>
+					<span id="colorHexText" class="colorHexText">Hex: "HexName"</span>
 				</div>
-				<div id="gameArea" class="gameArea">
-					<button
-						id="gameStartButton"
-						class="gameStartButton"
-						anchor="gameArea"
-						onclick="gameStart() ,testIfPossible()"
-					>
-						Start
-					</button>
-					<h1 id="lifeLost" class="lifeLost">You Died</h1>
-					<h1 id="gameWon" class="gameWon">You Won</h1>
-					<img src="" id="gamePlayer" class="gamePlayer" />
-					<img src="gameSprites/goal.png" id="gameGoal" class="gameGoal" />
-					<img
-						src="/gameSprites/map.png"
-						alt="game Map"
-						class="gameMap"
-						anchor="gameArea"
-					/>
-				</div>
-				<div class="rightPanel">
-					<div class="rightTopButtons">
-						<button
-							id="gameTurnLeft"
-							class="gameButton"
-							onclick="gameButtonActions(this.id)"
-						>
-							turn left
-						</button>
-						<button
-							id="gameMoveForward"
-							class="gameButton"
-							onclick="gameButtonActions(this.id)"
-						>
-							forward
-						</button>
-						<button
-							id="gameTurnRight"
-							class="gameButton"
-							onclick="gameButtonActions(this.id)"
-						>
-							turn right
-						</button>
-					</div>
-					<div id="rightPressedButtonsPanel" class="rightPressedButtonsPanel">
-						<div id="pressedLeftPanel" class="pressedLeftPanel"></div>
-						<div id="pressedRightPanel" class="pressedRightPanel"></div>
-					</div>
-					<div class="rightBottomButtons">
-						<button
-							id="gameClear"
-							class="gameButton"
-							onclick="gameButtonsClear(this.id)"
-						>
-							clear
-						</button>
-						<button
-							id="gameDelete"
-							class="gameButton"
-							onclick="gameButtonsClear(this.id)"
-						>
-							delete
-						</button>
-						<button id="gameGo" class="gameButton" onclick="gameMovement()">
-							go
-						</button>
-					</div>
-				</div>
+				<button
+					id="colorButton"
+					class="colorButton"
+					onclick="colorChange()"
+					anchor="colorFlipper"
+				>
+					Change Color
+				</button>
 			</div>
 		</section>
 
 		<div class="empty"></div>
 
 		<section>
-			<h1 class="projHeader">Aim Trainer</h1>
+			<h1 id="aimTrainerH1" class="projHeader">Aim Trainer</h1>
 			<div id="aimTrainer" class="proj aimTrainer">
 				<button
 					class="aimButton"
@@ -184,30 +136,95 @@
 		<div class="empty"></div>
 
 		<section>
-			<h1 class="projHeader">Color Flipper</h1>
-			<div id="colorFlipper" class="proj colorFlipper">
-				<div class="colorTextContainer">
-					<span id="colorNameText" class="colorNameText">Color: </span>
-					<span id="colorTextColor" class="colorTextColor">"colorName"</span>
-					<span id="colorHexText" class="colorHexText">Hex: "HexName"</span>
+			<h1 id="javaScriptGameH1" class="projHeader">JavaScript game</h1>
+			<div id="javaScriptGame" class="proj proj3">
+				<div class="leftPanel">
+					<div id="gameLevel" class="leftInfo">level : 1</div>
+					<div class="leftInfo gameLives">
+						lives :
+						<div id="gameHeart1" class="heart">❤</div>
+						<div id="gameHeart2" class="heart">❤</div>
+						<div id="gameHeart3" class="heart">❤</div>
+					</div>
 				</div>
-				<button
-					id="colorButton"
-					class="colorButton"
-					onclick="colorChange()"
-					anchor="colorFlipper"
-				>
-					Change Color
-				</button>
+				<div id="gameArea" class="gameArea">
+					<button
+						id="gameStartButton"
+						class="gameStartButton"
+						anchor="gameArea"
+						onclick="gameStart() ,testIfPossible()"
+					>
+						Start
+					</button>
+					<h1 id="lifeLost" class="lifeLost">You Died</h1>
+					<h1 id="gameWon" class="gameWon">You Won</h1>
+					<img src="" id="gamePlayer" class="gamePlayer" />
+					<img src="gameSprites/goal.png" id="gameGoal" class="gameGoal" />
+					<img
+						src="/gameSprites/map.png"
+						alt="game Map"
+						class="gameMap"
+						anchor="gameArea"
+					/>
+				</div>
+				<div class="rightPanel">
+					<div class="rightTopButtons">
+						<button
+							id="gameTurnLeft"
+							class="gameButton"
+							onclick="gameButtonActions(this.id)"
+						>
+							turn left
+						</button>
+						<button
+							id="gameMoveForward"
+							class="gameButton"
+							onclick="gameButtonActions(this.id)"
+						>
+							forward
+						</button>
+						<button
+							id="gameTurnRight"
+							class="gameButton"
+							onclick="gameButtonActions(this.id)"
+						>
+							turn right
+						</button>
+					</div>
+					<div id="rightPressedButtonsPanel" class="rightPressedButtonsPanel">
+						<div id="pressedLeftPanel" class="pressedLeftPanel"></div>
+						<div id="pressedRightPanel" class="pressedRightPanel"></div>
+					</div>
+					<div class="rightBottomButtons">
+						<button
+							id="gameClear"
+							class="gameButton"
+							onclick="gameButtonsClear(this.id)"
+						>
+							clear
+						</button>
+						<button
+							id="gameDelete"
+							class="gameButton"
+							onclick="gameButtonsClear(this.id)"
+						>
+							delete
+						</button>
+						<button id="gameGo" class="gameButton" onclick="gameMovement()">
+							go
+						</button>
+					</div>
+				</div>
 			</div>
 		</section>
 
 		<div class="empty"></div>
 
 		<section>
-			<h1 class="projHeader">test</h1>
-			<div id="content" class="proj">
-				<button onclick="addElement()">test</button>
+			<h1 id="crudAppH1" class="projHeader">test</h1>
+			<div id="crudApp" class="proj">
+				<button onclick="leetCode()">test</button>
+				<h1 id="testBox">test</h1>
 			</div>
 		</section>
 	</body>
