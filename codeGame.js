@@ -152,7 +152,7 @@ function gamePlaceOnGrid() {
 		spikeTemp = document.createElement("img");
 		spikeTemp.classList.add("gameSpike");
 		spikeTemp.setAttribute("id", "gameSpike" + i);
-		spikeTemp.src = "/gameSprites/spikes.png";
+		spikeTemp.src = "gameSprites/spikes.png";
 		document.getElementById("gameArea").appendChild(spikeTemp);
 		document.getElementById("gameSpike" + i).style.gridArea =
 			spike[i].x + "/" + spike[i].y;
