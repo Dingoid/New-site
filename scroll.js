@@ -13,13 +13,6 @@ let cF,
 	gameBall,
 	crudBall;
 
-function scaleOnLoad() {
-	document.getElementById("scrollBall1").style.scale = 1;
-	document.getElementById("scrollBall2").style.scale = 1;
-	document.getElementById("scrollBall3").style.scale = 1;
-	document.getElementById("scrollBall4").style.scale = 1;
-}
-
 function scrollBoundingClient() {
 	cF = document.getElementById("colorFlipperH1");
 	aT = document.getElementById("aimTrainerH1");
@@ -114,6 +107,9 @@ function scrollBallScale(projTop, projBottom) {
 		if (projTop == "jG" && projBottom == "cA") {
 			gameBall = 1.5;
 			crudBall = 1;
+		}
+		if (colorFlipper.top >= 0) {
+			colorBall = 1.5;
 		}
 	}
 
