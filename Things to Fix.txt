@@ -1,7 +1,4 @@
 OVERALL THINGS TO LEARN/FIX:
-    scroll buttons that get bigger based on what part of the page youre on and you can click on them to quickly scroll to that part of the page
-        (the balls are there but the do literally nothing right now)
-
     fix general cs shit
 
     basic CRUD app add to website
@@ -10,12 +7,9 @@ OVERALL THINGS TO LEARN/FIX:
 
 
 WHAT I DID TODAY:  
-    
 
 
 WHERE I LEFT OFF:
-    time to start on the scroll buttons
-
 
 
 CODING GAME NEEDS: (not sorted)
